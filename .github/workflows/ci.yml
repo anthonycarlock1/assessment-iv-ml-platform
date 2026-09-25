@@ -34,8 +34,8 @@ jobs:
       - name: Install Terraform
         run: |
           set -e
-          TF_VERSION=1.6.8
-          curl -fsSL "https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip" -o /tmp/terraform.zip
+          # Use explicit versioned URL to avoid variable expansion issues in runner logs
+          curl -fsSL "https://releases.hashicorp.com/terraform/1.6.8/terraform_1.6.8_linux_amd64.zip" -o /tmp/terraform.zip
           sudo unzip -o /tmp/terraform.zip -d /usr/local/bin
           terraform -version
 
