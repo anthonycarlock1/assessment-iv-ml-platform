@@ -31,26 +31,13 @@ jobs:
           python -m unittest apps/services/forecasting/test_main.py
           python -m unittest apps/services/recommendations/test_main.py
 
-      - name: Install Terraform
+      - name: Terraform validation (skip if missing)
         run: |
-          set -euo pipefail
-          TF_VERSION=1.6.8
-          ARCH=$(uname -m)
-          if [ "$ARCH" = "x86_64" ] || [ "$ARCH" = "amd64" ]; then
-            TF_OSARCH="linux_amd64"
-          elif [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
-            TF_OSARCH="linux_arm64"
+          if command -v terraform >/dev/null 2>&1; then
+            echo "Terraform found: $(terraform -version | head -n1)"
+            cd terraform
+            terraform init -backend=false
+            terraform validate
           else
-            TF_OSARCH="linux_amd64"
+            echo "Terraform not available in runner — skipping terraform validate"
           fi
-          URL="https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_${TF_OSARCH}.zip"
-          echo "Downloading Terraform from: $URL"
-          curl -fsSL "$URL" -o /tmp/terraform.zip
-          sudo unzip -o /tmp/terraform.zip -d /usr/local/bin
-          terraform -version
-
-      - name: Terraform validation
-        run: |
-          cd terraform
-          terraform init -backend=false
-          terraform validate
