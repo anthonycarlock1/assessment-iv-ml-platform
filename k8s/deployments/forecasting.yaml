@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forecasting-service
+  namespace: fraud-team
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: forecasting-service
+  template:
+    metadata:
+      labels:
+        app: forecasting-service
+    spec:
+      containers:
+        - name: forecasting
+          image: 388691194728.dkr.ecr.us-east-1.amazonaws.com/anthony-assessment4-forecasting:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: forecasting-config
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"

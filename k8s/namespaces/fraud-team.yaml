@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: fraud-team
+  labels:
+    project: assessment4
+    owner: anthony
+    managed-by: ml-platform

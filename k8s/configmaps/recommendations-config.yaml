@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: recommendations-config
+  namespace: fraud-team
+data:
+  SERVICE_NAME: "recommendations"
+  MODEL_NAME: "recommendations-local-placeholder-v1"
+  AWS_REGION: "us-east-1"
+  LOG_LEVEL: "INFO"

@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  validate-services:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install service dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r apps/services/fraud/requirements.txt
+          pip install -r apps/services/forecasting/requirements.txt
+          pip install -r apps/services/recommendations/requirements.txt
+
+      - name: Run service tests
+        run: |
+          python -m unittest apps/services/fraud/test_main.py
+          python -m unittest apps/services/forecasting/test_main.py
+          python -m unittest apps/services/recommendations/test_main.py
+
+      - name: Terraform validation
+        run: |
+          cd terraform
+          terraform init -backend=false
+          terraform validate
