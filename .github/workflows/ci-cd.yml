@@ -31,6 +31,11 @@ jobs:
           python -m unittest apps/services/forecasting/test_main.py
           python -m unittest apps/services/recommendations/test_main.py
 
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.6.8
+
       - name: Terraform validation
         run: |
           cd terraform
