@@ -60,10 +60,13 @@ fi
 
 aws ecr get-login-password --region "$AWS_REGION" | docker login --username AWS --password-stdin "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
 
+OWNER="${OWNER:-anthony}"
+PROJECT_NAME="${PROJECT_NAME:-anthony-assessment4}"
+
 declare -A REPOS=(
-  [fraud]="anthony-assessment4-fraud"
-  [forecasting]="anthony-assessment4-forecasting"
-  [recommendations]="anthony-assessment4-recommendations"
+  [fraud]="${OWNER}-${PROJECT_NAME}-fraud"
+  [forecasting]="${OWNER}-${PROJECT_NAME}-forecasting"
+  [recommendations]="${OWNER}-${PROJECT_NAME}-recommendations"
 )
 
 for SERVICE in fraud forecasting recommendations; do

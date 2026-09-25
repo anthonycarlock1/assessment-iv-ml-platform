@@ -47,8 +47,12 @@ if ! command -v aws >/dev/null 2>&1; then
   exit 1
 fi
 
+OWNER="${OWNER:-anthony}"
+PROJECT_NAME="${PROJECT_NAME:-anthony-assessment4}"
+EKS_CLUSTER_NAME="${EKS_CLUSTER_NAME:-${OWNER}-${PROJECT_NAME}-eks}"
+
 aws sts get-caller-identity --region "$AWS_REGION" >/dev/null
-aws eks update-kubeconfig --region "$AWS_REGION" --name anthony-assessment4-eks >/dev/null
+aws eks update-kubeconfig --region "$AWS_REGION" --name "$EKS_CLUSTER_NAME" >/dev/null
 kubectl get nodes >/dev/null
 
 if [[ "$VALIDATE_ONLY" == "true" ]]; then

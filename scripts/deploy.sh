@@ -63,7 +63,8 @@ if [[ -z "$AWS_ACCOUNT_ID" ]]; then
   exit 1
 fi
 
-aws eks update-kubeconfig --region "$AWS_REGION" --name anthony-assessment4-eks >/dev/null
+EKS_CLUSTER_NAME="${EKS_CLUSTER_NAME:-${OWNER:-anthony}-${PROJECT_NAME:-anthony-assessment4}-eks}"
+aws eks update-kubeconfig --region "$AWS_REGION" --name "$EKS_CLUSTER_NAME" >/dev/null
 
 kubectl apply -f k8s/namespaces/fraud-team.yaml
 kubectl apply -f k8s/configmaps/
@@ -73,9 +74,9 @@ kubectl apply -f k8s/services/
 kubectl apply -f k8s/ingress/ingress.yaml
 
 declare -A IMAGE_REPOS=(
-  [fraud]="anthony-assessment4-fraud"
-  [forecasting]="anthony-assessment4-forecasting"
-  [recommendations]="anthony-assessment4-recommendations"
+  [fraud]="${OWNER:-anthony}-${PROJECT_NAME:-anthony-assessment4}-fraud"
+  [forecasting]="${OWNER:-anthony}-${PROJECT_NAME:-anthony-assessment4}-forecasting"
+  [recommendations]="${OWNER:-anthony}-${PROJECT_NAME:-anthony-assessment4}-recommendations"
 )
 
 declare -A DEPLOYMENTS=(
