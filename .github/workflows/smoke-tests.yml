@@ -29,6 +29,7 @@ jobs:
           pip install -r apps/services/forecasting/requirements.txt || true
           pip install -r apps/services/fraud/requirements.txt || true
           pip install -r apps/services/recommendations/requirements.txt || true
+          pip install pytest
 
       - name: Run forecasting smoke tests
         run: python -m pytest -q apps/services/forecasting/test_main.py
