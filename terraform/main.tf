@@ -103,7 +103,9 @@ resource "aws_iam_role" "cluster" {
     ]
   })
 
-  tags = local.common_tags
+  tags = merge(local.common_tags, {
+    Name = "${var.owner}-${var.project_name}-eks-cluster-role"
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "cluster_policy" {
@@ -149,7 +151,9 @@ resource "aws_iam_role" "node_group" {
     ]
   })
 
-  tags = local.common_tags
+  tags = merge(local.common_tags, {
+    Name = "${var.owner}-${var.project_name}-eks-node-role"
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "node_group_eks_worker" {
