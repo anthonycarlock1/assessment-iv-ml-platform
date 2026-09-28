@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fraud-config
+  namespace: fraud-team
+data:
+  SERVICE_NAME: "fraud-detection"
+  MODEL_NAME: "fraud-local-placeholder-v1"
+  AWS_REGION: "us-east-1"
+  LOG_LEVEL: "INFO"

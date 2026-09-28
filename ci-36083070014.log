@@ -1,0 +1,411 @@
+validate-services	Set up job	﻿2026-09-25T01:40:54.0391392Z Current runner version: '2.337.0'
+validate-services	Set up job	2026-09-25T01:40:54.0414792Z ##[group]Runner Image Provisioner
+validate-services	Set up job	2026-09-25T01:40:54.0415642Z Hosted Compute Agent
+validate-services	Set up job	2026-09-25T01:40:54.0416137Z Version: 20260828.587
+validate-services	Set up job	2026-09-25T01:40:54.0416744Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+validate-services	Set up job	2026-09-25T01:40:54.0417359Z Build Date: 2026-08-28T16:44:25Z
+validate-services	Set up job	2026-09-25T01:40:54.0417952Z Worker ID: {8851e31f-5a5e-4169-9a39-c8879a5703c0}
+validate-services	Set up job	2026-09-25T01:40:54.0418566Z Azure Region: westus3
+validate-services	Set up job	2026-09-25T01:40:54.0419274Z ##[endgroup]
+validate-services	Set up job	2026-09-25T01:40:54.0420623Z ##[group]Operating System
+validate-services	Set up job	2026-09-25T01:40:54.0421188Z Ubuntu
+validate-services	Set up job	2026-09-25T01:40:54.0421679Z 24.04.5
+validate-services	Set up job	2026-09-25T01:40:54.0422184Z LTS
+validate-services	Set up job	2026-09-25T01:40:54.0422664Z ##[endgroup]
+validate-services	Set up job	2026-09-25T01:40:54.0423223Z ##[group]Runner Image
+validate-services	Set up job	2026-09-25T01:40:54.0423775Z Image: ubuntu-24.04
+validate-services	Set up job	2026-09-25T01:40:54.0424292Z Version: 20260920.314.1
+validate-services	Set up job	2026-09-25T01:40:54.0425281Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260920.314/images/ubuntu/Ubuntu2404-Readme.md
+validate-services	Set up job	2026-09-25T01:40:54.0426875Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260920.314
+validate-services	Set up job	2026-09-25T01:40:54.0427742Z ##[endgroup]
+validate-services	Set up job	2026-09-25T01:40:54.0428856Z ##[group]GITHUB_TOKEN Permissions
+validate-services	Set up job	2026-09-25T01:40:54.0431331Z Contents: read
+validate-services	Set up job	2026-09-25T01:40:54.0431853Z Metadata: read
+validate-services	Set up job	2026-09-25T01:40:54.0432400Z Packages: read
+validate-services	Set up job	2026-09-25T01:40:54.0432922Z ##[endgroup]
+validate-services	Set up job	2026-09-25T01:40:54.0435094Z Secret source: Actions
+validate-services	Set up job	2026-09-25T01:40:54.0435996Z Cache mode: write
+validate-services	Set up job	2026-09-25T01:40:54.0436614Z Prepare workflow directory
+validate-services	Set up job	2026-09-25T01:40:54.0703253Z Prepare all required actions
+validate-services	Set up job	2026-09-25T01:40:54.0747486Z Getting action download info
+validate-services	Set up job	2026-09-25T01:40:54.4332268Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+validate-services	Set up job	2026-09-25T01:40:54.5499894Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+validate-services	Set up job	2026-09-25T01:40:54.7410681Z Complete job name: validate-services
+validate-services	Checkout code	﻿2026-09-25T01:40:54.8028381Z ##[group]Run actions/checkout@v4
+validate-services	Checkout code	2026-09-25T01:40:54.8029420Z with:
+validate-services	Checkout code	2026-09-25T01:40:54.8030021Z   repository: anthonycarlock1/assessment-iv-ml-platform
+validate-services	Checkout code	2026-09-25T01:40:54.8034092Z   token: ***
+validate-services	Checkout code	2026-09-25T01:40:54.8034554Z   ssh-strict: true
+validate-services	Checkout code	2026-09-25T01:40:54.8035038Z   ssh-user: git
+validate-services	Checkout code	2026-09-25T01:40:54.8035525Z   persist-credentials: true
+validate-services	Checkout code	2026-09-25T01:40:54.8036044Z   clean: true
+validate-services	Checkout code	2026-09-25T01:40:54.8036562Z   sparse-checkout-cone-mode: true
+validate-services	Checkout code	2026-09-25T01:40:54.8037109Z   fetch-depth: 1
+validate-services	Checkout code	2026-09-25T01:40:54.8037604Z   fetch-tags: false
+validate-services	Checkout code	2026-09-25T01:40:54.8038090Z   show-progress: true
+validate-services	Checkout code	2026-09-25T01:40:54.8038561Z   lfs: false
+validate-services	Checkout code	2026-09-25T01:40:54.8039035Z   submodules: false
+validate-services	Checkout code	2026-09-25T01:40:54.8039633Z   set-safe-directory: true
+validate-services	Checkout code	2026-09-25T01:40:54.8040170Z   allow-unsafe-pr-checkout: false
+validate-services	Checkout code	2026-09-25T01:40:54.8040920Z ##[endgroup]
+validate-services	Checkout code	2026-09-25T01:40:54.8976012Z Syncing repository: anthonycarlock1/assessment-iv-ml-platform
+validate-services	Checkout code	2026-09-25T01:40:54.8977853Z ##[group]Getting Git version info
+validate-services	Checkout code	2026-09-25T01:40:54.8978912Z Working directory is '/home/runner/work/assessment-iv-ml-platform/assessment-iv-ml-platform'
+validate-services	Checkout code	2026-09-25T01:40:54.8980350Z [command]/usr/bin/git version
+validate-services	Checkout code	2026-09-25T01:40:54.9065388Z git version 2.55.0
+validate-services	Checkout code	2026-09-25T01:40:54.9087520Z ##[endgroup]
+validate-services	Checkout code	2026-09-25T01:40:54.9105510Z Temporarily overriding HOME='/home/runner/work/_temp/043a055c-ee7d-43f9-ba8a-201b2aa006b2' before making global git config changes
+validate-services	Checkout code	2026-09-25T01:40:54.9110550Z Adding repository directory to the temporary git global config as a safe directory
+validate-services	Checkout code	2026-09-25T01:40:54.9113189Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/assessment-iv-ml-platform/assessment-iv-ml-platform
+validate-services	Checkout code	2026-09-25T01:40:54.9162125Z Deleting the contents of '/home/runner/work/assessment-iv-ml-platform/assessment-iv-ml-platform'
+validate-services	Checkout code	2026-09-25T01:40:54.9165555Z ##[group]Initializing the repository
+validate-services	Checkout code	2026-09-25T01:40:54.9170157Z [command]/usr/bin/git init /home/runner/work/assessment-iv-ml-platform/assessment-iv-ml-platform
+validate-services	Checkout code	2026-09-25T01:40:54.9258197Z hint: Using 'master' as the name for the initial branch. This default branch name
+validate-services	Checkout code	2026-09-25T01:40:54.9260458Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+validate-services	Checkout code	2026-09-25T01:40:54.9262138Z hint: to use in all of your new repositories, which will suppress this warning,
+validate-services	Checkout code	2026-09-25T01:40:54.9266692Z hint: call:
+validate-services	Checkout code	2026-09-25T01:40:54.9267531Z hint:
+validate-services	Checkout code	2026-09-25T01:40:54.9268422Z hint: 	git config --global init.defaultBranch <name>
+validate-services	Checkout code	2026-09-25T01:40:54.9269501Z hint:
+validate-services	Checkout code	2026-09-25T01:40:54.9270439Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+validate-services	Checkout code	2026-09-25T01:40:54.9271808Z hint: 'development'. The just-created branch can be renamed via this command:
+validate-services	Checkout code	2026-09-25T01:40:54.9272921Z hint:
+validate-services	Checkout code	2026-09-25T01:40:54.9273635Z hint: 	git branch -m <name>
+validate-services	Checkout code	2026-09-25T01:40:54.9274905Z hint:
+validate-services	Checkout code	2026-09-25T01:40:54.9276036Z hint: Disable this message with "git config set advice.defaultBranchName false"
+validate-services	Checkout code	2026-09-25T01:40:54.9277933Z Initialized empty Git repository in /home/runner/work/assessment-iv-ml-platform/assessment-iv-ml-platform/.git/
+validate-services	Checkout code	2026-09-25T01:40:54.9281487Z [command]/usr/bin/git remote add origin https://github.com/anthonycarlock1/assessment-iv-ml-platform
+validate-services	Checkout code	2026-09-25T01:40:54.9320644Z ##[endgroup]
+validate-services	Checkout code	2026-09-25T01:40:54.9322257Z ##[group]Disabling automatic garbage collection
+validate-services	Checkout code	2026-09-25T01:40:54.9323521Z [command]/usr/bin/git config --local gc.auto 0
+validate-services	Checkout code	2026-09-25T01:40:54.9351920Z ##[endgroup]
+validate-services	Checkout code	2026-09-25T01:40:54.9353782Z ##[group]Setting up auth
+validate-services	Checkout code	2026-09-25T01:40:54.9356657Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+validate-services	Checkout code	2026-09-25T01:40:54.9383416Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+validate-services	Checkout code	2026-09-25T01:40:54.9696105Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+validate-services	Checkout code	2026-09-25T01:40:54.9723729Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+validate-services	Checkout code	2026-09-25T01:40:54.9898856Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+validate-services	Checkout code	2026-09-25T01:40:54.9924454Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+validate-services	Checkout code	2026-09-25T01:40:55.0112747Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+validate-services	Checkout code	2026-09-25T01:40:55.0147744Z ##[endgroup]
+validate-services	Checkout code	2026-09-25T01:40:55.0149382Z ##[group]Fetching the repository
+validate-services	Checkout code	2026-09-25T01:40:55.0159062Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +f25cf5044b71d88ae3745babbe606b38225ae3ca:refs/remotes/origin/main
+validate-services	Checkout code	2026-09-25T01:40:57.1165992Z From https://github.com/anthonycarlock1/assessment-iv-ml-platform
+validate-services	Checkout code	2026-09-25T01:40:57.1167764Z  * [new ref]         f25cf5044b71d88ae3745babbe606b38225ae3ca -> origin/main
+validate-services	Checkout code	2026-09-25T01:40:57.1172455Z ##[endgroup]
+validate-services	Checkout code	2026-09-25T01:40:57.1174220Z ##[group]Determining the checkout info
+validate-services	Checkout code	2026-09-25T01:40:57.1176196Z ##[endgroup]
+validate-services	Checkout code	2026-09-25T01:40:57.1178938Z [command]/usr/bin/git sparse-checkout disable
+validate-services	Checkout code	2026-09-25T01:40:57.1226356Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+validate-services	Checkout code	2026-09-25T01:40:57.1256560Z ##[group]Checking out the ref
+validate-services	Checkout code	2026-09-25T01:40:57.1260196Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+validate-services	Checkout code	2026-09-25T01:40:57.3352246Z Switched to a new branch 'main'
+validate-services	Checkout code	2026-09-25T01:40:57.3361531Z branch 'main' set up to track 'origin/main'.
+validate-services	Checkout code	2026-09-25T01:40:57.3366761Z ##[endgroup]
+validate-services	Checkout code	2026-09-25T01:40:57.3403318Z [command]/usr/bin/git log -1 --format=%H
+validate-services	Checkout code	2026-09-25T01:40:57.3424669Z f25cf5044b71d88ae3745babbe606b38225ae3ca
+validate-services	Set up Python	﻿2026-09-25T01:40:57.3762765Z ##[group]Run actions/setup-python@v5
+validate-services	Set up Python	2026-09-25T01:40:57.3764071Z with:
+validate-services	Set up Python	2026-09-25T01:40:57.3765102Z   python-version: 3.11
+validate-services	Set up Python	2026-09-25T01:40:57.3766293Z   check-latest: false
+validate-services	Set up Python	2026-09-25T01:40:57.3775772Z   token: ***
+validate-services	Set up Python	2026-09-25T01:40:57.3776821Z   update-environment: true
+validate-services	Set up Python	2026-09-25T01:40:57.3777912Z   allow-prereleases: false
+validate-services	Set up Python	2026-09-25T01:40:57.3779004Z   freethreaded: false
+validate-services	Set up Python	2026-09-25T01:40:57.3780057Z ##[endgroup]
+validate-services	Set up Python	2026-09-25T01:40:57.4925680Z ##[group]Installed versions
+validate-services	Set up Python	2026-09-25T01:40:57.5003264Z (node:2101) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+validate-services	Set up Python	2026-09-25T01:40:57.5007081Z (Use `node --trace-deprecation ...` to show where the warning was created)
+validate-services	Set up Python	2026-09-25T01:40:57.5009638Z Successfully set up CPython (3.11.16)
+validate-services	Set up Python	2026-09-25T01:40:57.5012354Z ##[endgroup]
+validate-services	Install service dependencies	﻿2026-09-25T01:40:57.5165607Z ##[group]Run python -m pip install --upgrade pip
+validate-services	Install service dependencies	2026-09-25T01:40:57.5167199Z [36;1mpython -m pip install --upgrade pip[0m
+validate-services	Install service dependencies	2026-09-25T01:40:57.5168641Z [36;1mpip install -r apps/services/fraud/requirements.txt[0m
+validate-services	Install service dependencies	2026-09-25T01:40:57.5170717Z [36;1mpip install -r apps/services/forecasting/requirements.txt[0m
+validate-services	Install service dependencies	2026-09-25T01:40:57.5172537Z [36;1mpip install -r apps/services/recommendations/requirements.txt[0m
+validate-services	Install service dependencies	2026-09-25T01:40:57.5393405Z shell: /usr/bin/bash -e {0}
+validate-services	Install service dependencies	2026-09-25T01:40:57.5395011Z env:
+validate-services	Install service dependencies	2026-09-25T01:40:57.5396138Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.16/x64
+validate-services	Install service dependencies	2026-09-25T01:40:57.5397918Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.16/x64/lib/pkgconfig
+validate-services	Install service dependencies	2026-09-25T01:40:57.5399811Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.16/x64
+validate-services	Install service dependencies	2026-09-25T01:40:57.5401404Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.16/x64
+validate-services	Install service dependencies	2026-09-25T01:40:57.5402967Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.16/x64
+validate-services	Install service dependencies	2026-09-25T01:40:57.5404627Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.16/x64/lib
+validate-services	Install service dependencies	2026-09-25T01:40:57.5406187Z ##[endgroup]
+validate-services	Install service dependencies	2026-09-25T01:40:58.1071473Z Requirement already satisfied: pip in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (26.2.1)
+validate-services	Install service dependencies	2026-09-25T01:40:58.6871985Z Collecting fastapi (from -r apps/services/fraud/requirements.txt (line 1))
+validate-services	Install service dependencies	2026-09-25T01:40:58.7456297Z   Downloading fastapi-0.141.1-py3-none-any.whl.metadata (27 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:58.7824352Z Collecting joblib (from -r apps/services/fraud/requirements.txt (line 3))
+validate-services	Install service dependencies	2026-09-25T01:40:58.7859585Z   Downloading joblib-1.6.0-py3-none-any.whl.metadata (6.5 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:58.8514190Z Collecting scikit-learn (from -r apps/services/fraud/requirements.txt (line 4))
+validate-services	Install service dependencies	2026-09-25T01:40:58.8547329Z   Downloading scikit_learn-1.9.1-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (9.3 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:58.8695222Z Collecting httpx (from -r apps/services/fraud/requirements.txt (line 5))
+validate-services	Install service dependencies	2026-09-25T01:40:58.8727337Z   Downloading httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:58.8928237Z Collecting uvicorn[standard] (from -r apps/services/fraud/requirements.txt (line 2))
+validate-services	Install service dependencies	2026-09-25T01:40:58.8960499Z   Downloading uvicorn-0.53.0-py3-none-any.whl.metadata (6.6 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:58.9158949Z Collecting starlette>=0.46.0 (from fastapi->-r apps/services/fraud/requirements.txt (line 1))
+validate-services	Install service dependencies	2026-09-25T01:40:58.9196352Z   Downloading starlette-1.7.0-py3-none-any.whl.metadata (6.6 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:58.9952875Z Collecting pydantic>=2.9.0 (from fastapi->-r apps/services/fraud/requirements.txt (line 1))
+validate-services	Install service dependencies	2026-09-25T01:40:58.9990608Z   Downloading pydantic-2.13.5-py3-none-any.whl.metadata (110 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:59.0186820Z Collecting typing-extensions>=4.8.0 (from fastapi->-r apps/services/fraud/requirements.txt (line 1))
+validate-services	Install service dependencies	2026-09-25T01:40:59.0220759Z   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:59.0327158Z Collecting typing-inspection>=0.4.2 (from fastapi->-r apps/services/fraud/requirements.txt (line 1))
+validate-services	Install service dependencies	2026-09-25T01:40:59.0364527Z   Downloading typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:59.0462936Z Collecting annotated-doc>=0.0.2 (from fastapi->-r apps/services/fraud/requirements.txt (line 1))
+validate-services	Install service dependencies	2026-09-25T01:40:59.0496841Z   Downloading annotated_doc-0.0.5-py3-none-any.whl.metadata (6.5 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:59.0819585Z Collecting click>=7.0 (from uvicorn[standard]->-r apps/services/fraud/requirements.txt (line 2))
+validate-services	Install service dependencies	2026-09-25T01:40:59.0854103Z   Downloading click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:59.0965757Z Collecting h11>=0.8 (from uvicorn[standard]->-r apps/services/fraud/requirements.txt (line 2))
+validate-services	Install service dependencies	2026-09-25T01:40:59.1000029Z   Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:59.1234174Z Collecting httptools>=0.8.0 (from uvicorn[standard]->-r apps/services/fraud/requirements.txt (line 2))
+validate-services	Install service dependencies	2026-09-25T01:40:59.1270076Z   Downloading httptools-0.8.0-cp311-cp311-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (3.5 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:59.1407577Z Collecting python-dotenv>=0.13 (from uvicorn[standard]->-r apps/services/fraud/requirements.txt (line 2))
+validate-services	Install service dependencies	2026-09-25T01:40:59.1443658Z   Downloading python_dotenv-1.2.3-py3-none-any.whl.metadata (29 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:59.1722586Z Collecting pyyaml>=5.1 (from uvicorn[standard]->-r apps/services/fraud/requirements.txt (line 2))
+validate-services	Install service dependencies	2026-09-25T01:40:59.1756831Z   Downloading pyyaml-6.0.3-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:59.2040008Z Collecting uvloop>=0.15.1 (from uvicorn[standard]->-r apps/services/fraud/requirements.txt (line 2))
+validate-services	Install service dependencies	2026-09-25T01:40:59.2076538Z   Downloading uvloop-0.22.1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (4.9 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:59.2620570Z Collecting watchfiles>=0.20 (from uvicorn[standard]->-r apps/services/fraud/requirements.txt (line 2))
+validate-services	Install service dependencies	2026-09-25T01:40:59.2663405Z   Downloading watchfiles-1.3.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.9 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:59.3666967Z Collecting websockets>=13.0 (from uvicorn[standard]->-r apps/services/fraud/requirements.txt (line 2))
+validate-services	Install service dependencies	2026-09-25T01:40:59.3705314Z   Downloading websockets-17.1-cp311-cp311-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (6.3 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:59.3831679Z Collecting cloudpickle>=3.0 (from joblib->-r apps/services/fraud/requirements.txt (line 3))
+validate-services	Install service dependencies	2026-09-25T01:40:59.3872654Z   Downloading cloudpickle-3.1.2-py3-none-any.whl.metadata (7.1 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:59.5311378Z Collecting numpy>=1.24.1 (from scikit-learn->-r apps/services/fraud/requirements.txt (line 4))
+validate-services	Install service dependencies	2026-09-25T01:40:59.5346014Z   Downloading numpy-2.4.6-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (6.6 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:59.6350255Z Collecting scipy>=1.10.0 (from scikit-learn->-r apps/services/fraud/requirements.txt (line 4))
+validate-services	Install service dependencies	2026-09-25T01:40:59.6387851Z   Downloading scipy-1.17.1-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:59.6710900Z Collecting narwhals>=2.0.1 (from scikit-learn->-r apps/services/fraud/requirements.txt (line 4))
+validate-services	Install service dependencies	2026-09-25T01:40:59.6742315Z   Downloading narwhals-2.26.0-py3-none-any.whl.metadata (15 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:59.6854770Z Collecting threadpoolctl>=3.5.0 (from scikit-learn->-r apps/services/fraud/requirements.txt (line 4))
+validate-services	Install service dependencies	2026-09-25T01:40:59.6890763Z   Downloading threadpoolctl-3.7.0-py3-none-any.whl.metadata (24 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:59.7048571Z Collecting anyio (from httpx->-r apps/services/fraud/requirements.txt (line 5))
+validate-services	Install service dependencies	2026-09-25T01:40:59.7082124Z   Downloading anyio-4.15.1-py3-none-any.whl.metadata (4.7 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:59.7246003Z Collecting certifi (from httpx->-r apps/services/fraud/requirements.txt (line 5))
+validate-services	Install service dependencies	2026-09-25T01:40:59.7282213Z   Downloading certifi-2026.7.22-py3-none-any.whl.metadata (2.5 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:59.7593416Z Collecting httpcore==1.* (from httpx->-r apps/services/fraud/requirements.txt (line 5))
+validate-services	Install service dependencies	2026-09-25T01:40:59.7629727Z   Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:59.7937774Z Collecting idna (from httpx->-r apps/services/fraud/requirements.txt (line 5))
+validate-services	Install service dependencies	2026-09-25T01:40:59.7969051Z   Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+validate-services	Install service dependencies	2026-09-25T01:40:59.8092251Z Collecting annotated-types>=0.6.0 (from pydantic>=2.9.0->fastapi->-r apps/services/fraud/requirements.txt (line 1))
+validate-services	Install service dependencies	2026-09-25T01:40:59.8125223Z   Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.2967567Z Collecting pydantic-core==2.46.5 (from pydantic>=2.9.0->fastapi->-r apps/services/fraud/requirements.txt (line 1))
+validate-services	Install service dependencies	2026-09-25T01:41:00.3004649Z   Downloading pydantic_core-2.46.5-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.6 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.3195565Z Downloading fastapi-0.141.1-py3-none-any.whl (131 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.3263388Z Downloading uvicorn-0.53.0-py3-none-any.whl (87 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.3316819Z Downloading joblib-1.6.0-py3-none-any.whl (306 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.3394713Z Downloading scikit_learn-1.9.1-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (9.3 MB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.4140692Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 9.3/9.3 MB 125.7 MB/s  0:00:00
+validate-services	Install service dependencies	2026-09-25T01:41:00.4176473Z Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.4230797Z Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.4280915Z Downloading annotated_doc-0.0.5-py3-none-any.whl (5.3 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.4330305Z Downloading click-8.5.0-py3-none-any.whl (125 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.4382205Z Downloading cloudpickle-3.1.2-py3-none-any.whl (22 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.4428662Z Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.4483724Z Downloading httptools-0.8.0-cp311-cp311-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (464 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.4571070Z Downloading narwhals-2.26.0-py3-none-any.whl (474 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.4643388Z Downloading numpy-2.4.6-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.9 MB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.6060648Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.9/16.9 MB 120.4 MB/s  0:00:00
+validate-services	Install service dependencies	2026-09-25T01:41:00.6100087Z Downloading pydantic-2.13.5-py3-none-any.whl (472 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.6177331Z Downloading pydantic_core-2.46.5-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.6327650Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 137.4 MB/s  0:00:00
+validate-services	Install service dependencies	2026-09-25T01:41:00.6358908Z Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.6408766Z Downloading python_dotenv-1.2.3-py3-none-any.whl (22 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.6464568Z Downloading pyyaml-6.0.3-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (806 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.6545099Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 806.6/806.6 kB 88.0 MB/s  0:00:00
+validate-services	Install service dependencies	2026-09-25T01:41:00.6583985Z Downloading scipy-1.17.1-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (35.3 MB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.9234195Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 35.3/35.3 MB 133.5 MB/s  0:00:00
+validate-services	Install service dependencies	2026-09-25T01:41:00.9269580Z Downloading starlette-1.7.0-py3-none-any.whl (78 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.9324262Z Downloading anyio-4.15.1-py3-none-any.whl (132 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.9376285Z Downloading idna-3.20-py3-none-any.whl (69 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.9451384Z Downloading threadpoolctl-3.7.0-py3-none-any.whl (26 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.9502503Z Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.9549826Z Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.9599050Z Downloading uvloop-0.22.1-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (3.8 MB)
+validate-services	Install service dependencies	2026-09-25T01:41:00.9896688Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.8/3.8 MB 128.2 MB/s  0:00:00
+validate-services	Install service dependencies	2026-09-25T01:41:00.9930296Z Downloading watchfiles-1.3.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (458 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:01.0005742Z Downloading websockets-17.1-cp311-cp311-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (224 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:01.0062189Z Downloading certifi-2026.7.22-py3-none-any.whl (136 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:01.1974793Z Installing collected packages: websockets, uvloop, typing-extensions, threadpoolctl, pyyaml, python-dotenv, numpy, narwhals, idna, httptools, h11, cloudpickle, click, certifi, annotated-types, annotated-doc, uvicorn, typing-inspection, scipy, pydantic-core, joblib, httpcore, anyio, watchfiles, starlette, scikit-learn, pydantic, httpx, fastapi
+validate-services	Install service dependencies	2026-09-25T01:41:08.4388590Z 
+validate-services	Install service dependencies	2026-09-25T01:41:08.4402696Z Successfully installed annotated-doc-0.0.5 annotated-types-0.8.0 anyio-4.15.1 certifi-2026.7.22 click-8.5.0 cloudpickle-3.1.2 fastapi-0.141.1 h11-0.16.0 httpcore-1.0.9 httptools-0.8.0 httpx-0.28.1 idna-3.20 joblib-1.6.0 narwhals-2.26.0 numpy-2.4.6 pydantic-2.13.5 pydantic-core-2.46.5 python-dotenv-1.2.3 pyyaml-6.0.3 scikit-learn-1.9.1 scipy-1.17.1 starlette-1.7.0 threadpoolctl-3.7.0 typing-extensions-4.16.0 typing-inspection-0.4.4 uvicorn-0.53.0 uvloop-0.22.1 watchfiles-1.3.0 websockets-17.1
+validate-services	Install service dependencies	2026-09-25T01:41:08.7833522Z Requirement already satisfied: fastapi in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from -r apps/services/forecasting/requirements.txt (line 1)) (0.141.1)
+validate-services	Install service dependencies	2026-09-25T01:41:08.7835588Z Requirement already satisfied: joblib in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from -r apps/services/forecasting/requirements.txt (line 3)) (1.6.0)
+validate-services	Install service dependencies	2026-09-25T01:41:08.7838862Z Requirement already satisfied: scikit-learn in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from -r apps/services/forecasting/requirements.txt (line 4)) (1.9.1)
+validate-services	Install service dependencies	2026-09-25T01:41:08.9452148Z Collecting pandas (from -r apps/services/forecasting/requirements.txt (line 5))
+validate-services	Install service dependencies	2026-09-25T01:41:08.9905965Z   Downloading pandas-3.0.6-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (79 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0269337Z Requirement already satisfied: httpx in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from -r apps/services/forecasting/requirements.txt (line 6)) (0.28.1)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0271401Z Requirement already satisfied: uvicorn[standard] in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from -r apps/services/forecasting/requirements.txt (line 2)) (0.53.0)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0281391Z Requirement already satisfied: starlette>=0.46.0 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from fastapi->-r apps/services/forecasting/requirements.txt (line 1)) (1.7.0)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0284869Z Requirement already satisfied: pydantic>=2.9.0 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from fastapi->-r apps/services/forecasting/requirements.txt (line 1)) (2.13.5)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0288429Z Requirement already satisfied: typing-extensions>=4.8.0 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from fastapi->-r apps/services/forecasting/requirements.txt (line 1)) (4.16.0)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0291728Z Requirement already satisfied: typing-inspection>=0.4.2 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from fastapi->-r apps/services/forecasting/requirements.txt (line 1)) (0.4.4)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0294711Z Requirement already satisfied: annotated-doc>=0.0.2 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from fastapi->-r apps/services/forecasting/requirements.txt (line 1)) (0.0.5)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0316521Z Requirement already satisfied: click>=7.0 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from uvicorn[standard]->-r apps/services/forecasting/requirements.txt (line 2)) (8.5.0)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0320384Z Requirement already satisfied: h11>=0.8 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from uvicorn[standard]->-r apps/services/forecasting/requirements.txt (line 2)) (0.16.0)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0327545Z Requirement already satisfied: httptools>=0.8.0 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from uvicorn[standard]->-r apps/services/forecasting/requirements.txt (line 2)) (0.8.0)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0333119Z Requirement already satisfied: python-dotenv>=0.13 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from uvicorn[standard]->-r apps/services/forecasting/requirements.txt (line 2)) (1.2.3)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0338319Z Requirement already satisfied: pyyaml>=5.1 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from uvicorn[standard]->-r apps/services/forecasting/requirements.txt (line 2)) (6.0.3)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0345030Z Requirement already satisfied: uvloop>=0.15.1 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from uvicorn[standard]->-r apps/services/forecasting/requirements.txt (line 2)) (0.22.1)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0349817Z Requirement already satisfied: watchfiles>=0.20 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from uvicorn[standard]->-r apps/services/forecasting/requirements.txt (line 2)) (1.3.0)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0354625Z Requirement already satisfied: websockets>=13.0 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from uvicorn[standard]->-r apps/services/forecasting/requirements.txt (line 2)) (17.1)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0368082Z Requirement already satisfied: cloudpickle>=3.0 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from joblib->-r apps/services/forecasting/requirements.txt (line 3)) (3.1.2)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0383547Z Requirement already satisfied: numpy>=1.24.1 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from scikit-learn->-r apps/services/forecasting/requirements.txt (line 4)) (2.4.6)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0386743Z Requirement already satisfied: scipy>=1.10.0 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from scikit-learn->-r apps/services/forecasting/requirements.txt (line 4)) (1.17.1)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0391405Z Requirement already satisfied: narwhals>=2.0.1 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from scikit-learn->-r apps/services/forecasting/requirements.txt (line 4)) (2.26.0)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0395720Z Requirement already satisfied: threadpoolctl>=3.5.0 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from scikit-learn->-r apps/services/forecasting/requirements.txt (line 4)) (3.7.0)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0484223Z Collecting python-dateutil>=2.8.2 (from pandas->-r apps/services/forecasting/requirements.txt (line 5))
+validate-services	Install service dependencies	2026-09-25T01:41:09.0532480Z   Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0573118Z Requirement already satisfied: anyio in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from httpx->-r apps/services/forecasting/requirements.txt (line 6)) (4.15.1)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0576465Z Requirement already satisfied: certifi in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from httpx->-r apps/services/forecasting/requirements.txt (line 6)) (2026.7.22)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0580362Z Requirement already satisfied: httpcore==1.* in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from httpx->-r apps/services/forecasting/requirements.txt (line 6)) (1.0.9)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0584077Z Requirement already satisfied: idna in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from httpx->-r apps/services/forecasting/requirements.txt (line 6)) (3.20)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0655484Z Requirement already satisfied: annotated-types>=0.6.0 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from pydantic>=2.9.0->fastapi->-r apps/services/forecasting/requirements.txt (line 1)) (0.8.0)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0659279Z Requirement already satisfied: pydantic-core==2.46.5 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from pydantic>=2.9.0->fastapi->-r apps/services/forecasting/requirements.txt (line 1)) (2.46.5)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0760084Z Collecting six>=1.5 (from python-dateutil>=2.8.2->pandas->-r apps/services/forecasting/requirements.txt (line 5))
+validate-services	Install service dependencies	2026-09-25T01:41:09.0803322Z   Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:09.0993903Z Downloading pandas-3.0.6-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (11.1 MB)
+validate-services	Install service dependencies	2026-09-25T01:41:09.1932257Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 11.1/11.1 MB 123.6 MB/s  0:00:00
+validate-services	Install service dependencies	2026-09-25T01:41:09.1977934Z Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:09.2042905Z Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+validate-services	Install service dependencies	2026-09-25T01:41:09.2794330Z Installing collected packages: six, python-dateutil, pandas
+validate-services	Install service dependencies	2026-09-25T01:41:12.4157781Z 
+validate-services	Install service dependencies	2026-09-25T01:41:12.4170999Z Successfully installed pandas-3.0.6 python-dateutil-2.9.0.post0 six-1.17.0
+validate-services	Install service dependencies	2026-09-25T01:41:12.7049241Z Requirement already satisfied: fastapi in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from -r apps/services/recommendations/requirements.txt (line 1)) (0.141.1)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7052170Z Requirement already satisfied: joblib in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from -r apps/services/recommendations/requirements.txt (line 3)) (1.6.0)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7055020Z Requirement already satisfied: scikit-learn in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from -r apps/services/recommendations/requirements.txt (line 4)) (1.9.1)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7057687Z Requirement already satisfied: pandas in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from -r apps/services/recommendations/requirements.txt (line 5)) (3.0.6)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7060513Z Requirement already satisfied: httpx in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from -r apps/services/recommendations/requirements.txt (line 6)) (0.28.1)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7063020Z Requirement already satisfied: uvicorn[standard] in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from -r apps/services/recommendations/requirements.txt (line 2)) (0.53.0)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7074809Z Requirement already satisfied: starlette>=0.46.0 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from fastapi->-r apps/services/recommendations/requirements.txt (line 1)) (1.7.0)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7078386Z Requirement already satisfied: pydantic>=2.9.0 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from fastapi->-r apps/services/recommendations/requirements.txt (line 1)) (2.13.5)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7081733Z Requirement already satisfied: typing-extensions>=4.8.0 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from fastapi->-r apps/services/recommendations/requirements.txt (line 1)) (4.16.0)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7084480Z Requirement already satisfied: typing-inspection>=0.4.2 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from fastapi->-r apps/services/recommendations/requirements.txt (line 1)) (0.4.4)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7087154Z Requirement already satisfied: annotated-doc>=0.0.2 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from fastapi->-r apps/services/recommendations/requirements.txt (line 1)) (0.0.5)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7107177Z Requirement already satisfied: click>=7.0 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from uvicorn[standard]->-r apps/services/recommendations/requirements.txt (line 2)) (8.5.0)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7110651Z Requirement already satisfied: h11>=0.8 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from uvicorn[standard]->-r apps/services/recommendations/requirements.txt (line 2)) (0.16.0)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7116418Z Requirement already satisfied: httptools>=0.8.0 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from uvicorn[standard]->-r apps/services/recommendations/requirements.txt (line 2)) (0.8.0)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7120458Z Requirement already satisfied: python-dotenv>=0.13 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from uvicorn[standard]->-r apps/services/recommendations/requirements.txt (line 2)) (1.2.3)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7124041Z Requirement already satisfied: pyyaml>=5.1 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from uvicorn[standard]->-r apps/services/recommendations/requirements.txt (line 2)) (6.0.3)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7129615Z Requirement already satisfied: uvloop>=0.15.1 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from uvicorn[standard]->-r apps/services/recommendations/requirements.txt (line 2)) (0.22.1)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7133591Z Requirement already satisfied: watchfiles>=0.20 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from uvicorn[standard]->-r apps/services/recommendations/requirements.txt (line 2)) (1.3.0)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7137289Z Requirement already satisfied: websockets>=13.0 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from uvicorn[standard]->-r apps/services/recommendations/requirements.txt (line 2)) (17.1)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7148759Z Requirement already satisfied: cloudpickle>=3.0 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from joblib->-r apps/services/recommendations/requirements.txt (line 3)) (3.1.2)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7163771Z Requirement already satisfied: numpy>=1.24.1 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from scikit-learn->-r apps/services/recommendations/requirements.txt (line 4)) (2.4.6)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7166805Z Requirement already satisfied: scipy>=1.10.0 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from scikit-learn->-r apps/services/recommendations/requirements.txt (line 4)) (1.17.1)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7170833Z Requirement already satisfied: narwhals>=2.0.1 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from scikit-learn->-r apps/services/recommendations/requirements.txt (line 4)) (2.26.0)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7173809Z Requirement already satisfied: threadpoolctl>=3.5.0 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from scikit-learn->-r apps/services/recommendations/requirements.txt (line 4)) (3.7.0)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7210408Z Requirement already satisfied: python-dateutil>=2.8.2 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from pandas->-r apps/services/recommendations/requirements.txt (line 5)) (2.9.0.post0)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7244790Z Requirement already satisfied: anyio in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from httpx->-r apps/services/recommendations/requirements.txt (line 6)) (4.15.1)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7247325Z Requirement already satisfied: certifi in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from httpx->-r apps/services/recommendations/requirements.txt (line 6)) (2026.7.22)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7250477Z Requirement already satisfied: httpcore==1.* in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from httpx->-r apps/services/recommendations/requirements.txt (line 6)) (1.0.9)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7252579Z Requirement already satisfied: idna in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from httpx->-r apps/services/recommendations/requirements.txt (line 6)) (3.20)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7322956Z Requirement already satisfied: annotated-types>=0.6.0 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from pydantic>=2.9.0->fastapi->-r apps/services/recommendations/requirements.txt (line 1)) (0.8.0)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7325753Z Requirement already satisfied: pydantic-core==2.46.5 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from pydantic>=2.9.0->fastapi->-r apps/services/recommendations/requirements.txt (line 1)) (2.46.5)
+validate-services	Install service dependencies	2026-09-25T01:41:12.7346476Z Requirement already satisfied: six>=1.5 in /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages (from python-dateutil>=2.8.2->pandas->-r apps/services/recommendations/requirements.txt (line 5)) (1.17.0)
+validate-services	Run service tests	﻿2026-09-25T01:41:12.8216111Z ##[group]Run python -m unittest apps/services/fraud/test_main.py
+validate-services	Run service tests	2026-09-25T01:41:12.8216763Z [36;1mpython -m unittest apps/services/fraud/test_main.py[0m
+validate-services	Run service tests	2026-09-25T01:41:12.8217220Z [36;1mpython -m unittest apps/services/forecasting/test_main.py[0m
+validate-services	Run service tests	2026-09-25T01:41:12.8217659Z [36;1mpython -m unittest apps/services/recommendations/test_main.py[0m
+validate-services	Run service tests	2026-09-25T01:41:12.8257929Z shell: /usr/bin/bash -e {0}
+validate-services	Run service tests	2026-09-25T01:41:12.8258344Z env:
+validate-services	Run service tests	2026-09-25T01:41:12.8258689Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.16/x64
+validate-services	Run service tests	2026-09-25T01:41:12.8259318Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.16/x64/lib/pkgconfig
+validate-services	Run service tests	2026-09-25T01:41:12.8259792Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.16/x64
+validate-services	Run service tests	2026-09-25T01:41:12.8260188Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.16/x64
+validate-services	Run service tests	2026-09-25T01:41:12.8260572Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.16/x64
+validate-services	Run service tests	2026-09-25T01:41:12.8261001Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.16/x64/lib
+validate-services	Run service tests	2026-09-25T01:41:12.8261373Z ##[endgroup]
+validate-services	Run service tests	2026-09-25T01:41:13.2508644Z /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+validate-services	Run service tests	2026-09-25T01:41:13.2510908Z   from starlette.testclient import TestClient as TestClient  # noqa
+validate-services	Run service tests	2026-09-25T01:41:14.3615963Z /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/sklearn/base.py:525: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.6.1 when using version 1.9.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+validate-services	Run service tests	2026-09-25T01:41:14.3618126Z https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+validate-services	Run service tests	2026-09-25T01:41:14.3619017Z   warnings.warn(
+validate-services	Run service tests	2026-09-25T01:41:14.3870315Z /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/sklearn/base.py:525: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.6.1 when using version 1.9.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+validate-services	Run service tests	2026-09-25T01:41:14.3872774Z https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+validate-services	Run service tests	2026-09-25T01:41:14.3873551Z   warnings.warn(
+validate-services	Run service tests	2026-09-25T01:41:14.4196206Z ./opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+validate-services	Run service tests	2026-09-25T01:41:14.4197172Z   warnings.warn(
+validate-services	Run service tests	2026-09-25T01:41:14.4294696Z /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+validate-services	Run service tests	2026-09-25T01:41:14.4295516Z   warnings.warn(
+validate-services	Run service tests	2026-09-25T01:41:14.4400863Z .
+validate-services	Run service tests	2026-09-25T01:41:14.4401465Z ----------------------------------------------------------------------
+validate-services	Run service tests	2026-09-25T01:41:14.4402110Z Ran 2 tests in 0.036s
+validate-services	Run service tests	2026-09-25T01:41:14.4402367Z 
+validate-services	Run service tests	2026-09-25T01:41:14.4402539Z OK
+validate-services	Run service tests	2026-09-25T01:41:14.8638747Z /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+validate-services	Run service tests	2026-09-25T01:41:14.8640583Z   from starlette.testclient import TestClient as TestClient  # noqa
+validate-services	Run service tests	2026-09-25T01:41:15.7529756Z /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/sklearn/base.py:525: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeRegressor from version 1.6.1 when using version 1.9.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+validate-services	Run service tests	2026-09-25T01:41:15.7531940Z https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+validate-services	Run service tests	2026-09-25T01:41:15.7532858Z   warnings.warn(
+validate-services	Run service tests	2026-09-25T01:41:15.7723190Z /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/sklearn/base.py:525: InconsistentVersionWarning: Trying to unpickle estimator RandomForestRegressor from version 1.6.1 when using version 1.9.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+validate-services	Run service tests	2026-09-25T01:41:15.7725907Z https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+validate-services	Run service tests	2026-09-25T01:41:15.7726720Z   warnings.warn(
+validate-services	Run service tests	2026-09-25T01:41:15.8023972Z ./opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestRegressor was fitted with feature names
+validate-services	Run service tests	2026-09-25T01:41:15.8025217Z   warnings.warn(
+validate-services	Run service tests	2026-09-25T01:41:15.8122231Z /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestRegressor was fitted with feature names
+validate-services	Run service tests	2026-09-25T01:41:15.8123550Z   warnings.warn(
+validate-services	Run service tests	2026-09-25T01:41:15.8215797Z /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestRegressor was fitted with feature names
+validate-services	Run service tests	2026-09-25T01:41:15.8217587Z   warnings.warn(
+validate-services	Run service tests	2026-09-25T01:41:15.8330502Z .
+validate-services	Run service tests	2026-09-25T01:41:15.8331321Z ----------------------------------------------------------------------
+validate-services	Run service tests	2026-09-25T01:41:15.8332107Z Ran 2 tests in 0.045s
+validate-services	Run service tests	2026-09-25T01:41:15.8332399Z 
+validate-services	Run service tests	2026-09-25T01:41:15.8332608Z OK
+validate-services	Run service tests	2026-09-25T01:41:16.2302154Z /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+validate-services	Run service tests	2026-09-25T01:41:16.2303902Z   from starlette.testclient import TestClient as TestClient  # noqa
+validate-services	Run service tests	2026-09-25T01:41:17.1123981Z /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/sklearn/base.py:525: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.6.1 when using version 1.9.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+validate-services	Run service tests	2026-09-25T01:41:17.1125917Z https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+validate-services	Run service tests	2026-09-25T01:41:17.1126475Z   warnings.warn(
+validate-services	Run service tests	2026-09-25T01:41:17.1367581Z /opt/hostedtoolcache/Python/3.11.16/x64/lib/python3.11/site-packages/sklearn/base.py:525: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.6.1 when using version 1.9.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+validate-services	Run service tests	2026-09-25T01:41:17.1368857Z https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+validate-services	Run service tests	2026-09-25T01:41:17.1369710Z   warnings.warn(
+validate-services	Run service tests	2026-09-25T01:41:17.2706483Z ..
+validate-services	Run service tests	2026-09-25T01:41:17.2707326Z ----------------------------------------------------------------------
+validate-services	Run service tests	2026-09-25T01:41:17.2708185Z Ran 2 tests in 0.119s
+validate-services	Run service tests	2026-09-25T01:41:17.2708484Z 
+validate-services	Run service tests	2026-09-25T01:41:17.2708668Z OK
+validate-services	Install Terraform	﻿2026-09-25T01:41:17.4307041Z ##[group]Run set -euo pipefail
+validate-services	Install Terraform	2026-09-25T01:41:17.4307478Z [36;1mset -euo pipefail[0m
+validate-services	Install Terraform	2026-09-25T01:41:17.4307770Z [36;1mTF_VERSION=1.6.8[0m
+validate-services	Install Terraform	2026-09-25T01:41:17.4308058Z [36;1mARCH=$(uname -m)[0m
+validate-services	Install Terraform	2026-09-25T01:41:17.4308432Z [36;1mif [ "$ARCH" = "x86_64" ] || [ "$ARCH" = "amd64" ]; then[0m
+validate-services	Install Terraform	2026-09-25T01:41:17.4308802Z [36;1m  TF_OSARCH="linux_amd64"[0m
+validate-services	Install Terraform	2026-09-25T01:41:17.4309421Z [36;1melif [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then[0m
+validate-services	Install Terraform	2026-09-25T01:41:17.4309835Z [36;1m  TF_OSARCH="linux_arm64"[0m
+validate-services	Install Terraform	2026-09-25T01:41:17.4310126Z [36;1melse[0m
+validate-services	Install Terraform	2026-09-25T01:41:17.4310422Z [36;1m  TF_OSARCH="linux_amd64"[0m
+validate-services	Install Terraform	2026-09-25T01:41:17.4310712Z [36;1mfi[0m
+validate-services	Install Terraform	2026-09-25T01:41:17.4311200Z [36;1mURL="https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_${TF_OSARCH}.zip"[0m
+validate-services	Install Terraform	2026-09-25T01:41:17.4311729Z [36;1mecho "Downloading Terraform from: $URL"[0m
+validate-services	Install Terraform	2026-09-25T01:41:17.4312207Z [36;1mcurl -fsSL "$URL" -o /tmp/terraform.zip[0m
+validate-services	Install Terraform	2026-09-25T01:41:17.4312623Z [36;1msudo unzip -o /tmp/terraform.zip -d /usr/local/bin[0m
+validate-services	Install Terraform	2026-09-25T01:41:17.4313081Z [36;1mterraform -version[0m
+validate-services	Install Terraform	2026-09-25T01:41:17.4350592Z shell: /usr/bin/bash -e {0}
+validate-services	Install Terraform	2026-09-25T01:41:17.4351011Z env:
+validate-services	Install Terraform	2026-09-25T01:41:17.4351332Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.16/x64
+validate-services	Install Terraform	2026-09-25T01:41:17.4351800Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.16/x64/lib/pkgconfig
+validate-services	Install Terraform	2026-09-25T01:41:17.4352256Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.16/x64
+validate-services	Install Terraform	2026-09-25T01:41:17.4352687Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.16/x64
+validate-services	Install Terraform	2026-09-25T01:41:17.4353088Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.16/x64
+validate-services	Install Terraform	2026-09-25T01:41:17.4353660Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.16/x64/lib
+validate-services	Install Terraform	2026-09-25T01:41:17.4354187Z ##[endgroup]
+validate-services	Install Terraform	2026-09-25T01:41:17.4420414Z Downloading Terraform from: https://releases.hashicorp.com/terraform/1.6.8/terraform_1.6.8_linux_amd64.zip
+validate-services	Install Terraform	2026-09-25T01:41:17.6620566Z curl: (22) The requested URL returned error: 404
+validate-services	Install Terraform	2026-09-25T01:41:17.6650889Z ##[error]Process completed with exit code 22.
+validate-services	Post Checkout code	﻿2026-09-25T01:41:17.6789405Z Post job cleanup.
+validate-services	Post Checkout code	2026-09-25T01:41:17.7520650Z [command]/usr/bin/git version
+validate-services	Post Checkout code	2026-09-25T01:41:17.7553493Z git version 2.55.0
+validate-services	Post Checkout code	2026-09-25T01:41:17.7594810Z Temporarily overriding HOME='/home/runner/work/_temp/68e3b295-e1ce-40d5-8138-170f00e4df7b' before making global git config changes
+validate-services	Post Checkout code	2026-09-25T01:41:17.7596997Z Adding repository directory to the temporary git global config as a safe directory
+validate-services	Post Checkout code	2026-09-25T01:41:17.7620700Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/assessment-iv-ml-platform/assessment-iv-ml-platform
+validate-services	Post Checkout code	2026-09-25T01:41:17.7648007Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+validate-services	Post Checkout code	2026-09-25T01:41:17.7680674Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+validate-services	Post Checkout code	2026-09-25T01:41:17.7871427Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+validate-services	Post Checkout code	2026-09-25T01:41:17.7890975Z http.https://github.com/.extraheader
+validate-services	Post Checkout code	2026-09-25T01:41:17.7900489Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+validate-services	Post Checkout code	2026-09-25T01:41:17.7927006Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+validate-services	Post Checkout code	2026-09-25T01:41:17.8118135Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+validate-services	Post Checkout code	2026-09-25T01:41:17.8156134Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+validate-services	Complete job	﻿2026-09-25T01:41:17.8474772Z Cleaning up orphan processes
+validate-services	Complete job	2026-09-25T01:41:17.8747764Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

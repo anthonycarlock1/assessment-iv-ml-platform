@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: forecasting-config
+  namespace: fraud-team
+data:
+  SERVICE_NAME: "forecasting"
+  MODEL_NAME: "moving-average-placeholder-v1"
+  AWS_REGION: "us-east-1"
+  LOG_LEVEL: "INFO"

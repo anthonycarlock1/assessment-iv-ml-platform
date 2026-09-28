@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: assessment4-ingress
+  namespace: fraud-team
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /fraud
+            pathType: Prefix
+            backend:
+              service:
+                name: fraud-service
+                port:
+                  number: 80
+          - path: /forecasting
+            pathType: Prefix
+            backend:
+              service:
+                name: forecasting-service
+                port:
+                  number: 80
+          - path: /recommendations
+            pathType: Prefix
+            backend:
+              service:
+                name: recommendations-service
+                port:
+                  number: 80
