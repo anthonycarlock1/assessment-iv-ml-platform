@@ -64,7 +64,9 @@ resource "aws_route_table_association" "public" {
 }
 
 resource "aws_security_group" "cluster" {
-  name        = "${var.owner}-${var.project_name}-eks-cluster-sg"
+  # preserve existing name to avoid forced replacement when owner/project
+  # values change; keep owner as a tag instead
+  name        = "${var.project_name}-eks-cluster-sg"
   description = "Security group for the Assessment IV EKS cluster"
   vpc_id      = aws_vpc.assessment.id
 
@@ -83,7 +85,7 @@ resource "aws_security_group" "cluster" {
   }
 
   tags = merge(local.common_tags, {
-    Name = "${var.owner}-${var.project_name}-eks-cluster-sg"
+    Name = "${var.project_name}-eks-cluster-sg"
   })
 }
 
