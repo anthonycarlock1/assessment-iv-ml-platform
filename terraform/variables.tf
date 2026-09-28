@@ -31,7 +31,8 @@ variable "eks_cluster_name" {
 variable "eks_version" {
   description = "Kubernetes version for the EKS cluster"
   type        = string
-  default     = "1.30"
+  # Set to the cluster's current version to avoid invalid downgrade/rollback
+  default     = "1.31"
 }
 
 variable "vpc_cidr" {
