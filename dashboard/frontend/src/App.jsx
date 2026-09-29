@@ -60,52 +60,59 @@ function App() {
   const [serviceStatus, setServiceStatus] = useState({})
   const [serviceResults, setServiceResults] = useState({})
   const [loading, setLoading] = useState(true)
+  const [lastUpdated, setLastUpdated] = useState('never')
 
-  useEffect(() => {
-    async function loadDashboard() {
-      setLoading(true)
-      const nextStatus = {}
-      const nextResults = {}
+  async function loadDashboard() {
+    setLoading(true)
+    const nextStatus = {}
+    const nextResults = {}
 
-      for (const service of serviceConfigs) {
-        try {
-          const health = await getServiceHealth(service.url)
-          nextStatus[service.key] = {
-            ...service,
-            status: health.status || 'healthy',
-            latency: 'live',
-            detail: health.service || service.name,
-          }
+    for (const service of serviceConfigs) {
+      try {
+        const health = await getServiceHealth(service.url)
+        nextStatus[service.key] = {
+          ...service,
+          status: health.status || 'healthy',
+          latency: 'live',
+          detail: health.service || service.name,
+        }
 
-          const prediction = await callPrediction(service)
-          nextResults[service.key] = {
-            ...service,
-            status: 'healthy',
-            detail: service.summary(prediction),
-            result: prediction,
-          }
-        } catch (error) {
-          nextStatus[service.key] = {
-            ...service,
-            status: 'offline',
-            latency: 'n/a',
-            detail: error.message,
-          }
-          nextResults[service.key] = {
-            ...service,
-            status: 'offline',
-            detail: 'Prediction unavailable',
-            result: null,
-          }
+        const prediction = await callPrediction(service)
+        nextResults[service.key] = {
+          ...service,
+          status: 'healthy',
+          detail: service.summary(prediction),
+          result: prediction,
+        }
+      } catch (error) {
+        nextStatus[service.key] = {
+          ...service,
+          status: 'offline',
+          latency: 'n/a',
+          detail: error.message,
+        }
+        nextResults[service.key] = {
+          ...service,
+          status: 'offline',
+          detail: 'Prediction unavailable',
+          result: null,
         }
       }
-
-      setServiceStatus(nextStatus)
-      setServiceResults(nextResults)
-      setLoading(false)
     }
 
+    setServiceStatus(nextStatus)
+    setServiceResults(nextResults)
+    setLastUpdated(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }))
+    setLoading(false)
+  }
+
+  useEffect(() => {
     loadDashboard()
+    const intervalId = window.setInterval(() => {
+      loadDashboard()
+    }, 15000)
+
+    return () => window.clearInterval(intervalId)
   }, [])
 
   const healthyCount = Object.values(serviceStatus).filter((service) => service.status === 'healthy').length
@@ -125,10 +132,13 @@ function App() {
           <h1>ML Platform Dashboard</h1>
         </div>
         <div className="topbar-actions">
+          <div className="topbar-meta">
+            <span className="muted">Last updated: {lastUpdated}</span>
+          </div>
           <span className={`status-pill ${healthyCount === 3 ? 'status-pill--online' : 'status-pill--offline'}`}>
             {loading ? 'Checking services' : healthyCount === 3 ? 'System online' : 'Partial outage'}
           </span>
-          <button type="button" className="action-button" onClick={() => window.location.reload()}>
+          <button type="button" className="action-button" onClick={loadDashboard}>
             Refresh
           </button>
         </div>

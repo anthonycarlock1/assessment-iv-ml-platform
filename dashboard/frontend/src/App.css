@@ -39,6 +39,11 @@
   gap: 12px;
 }
 
+.topbar-meta {
+  display: flex;
+  align-items: center;
+}
+
 .eyebrow {
   margin: 0;
   text-transform: uppercase;
