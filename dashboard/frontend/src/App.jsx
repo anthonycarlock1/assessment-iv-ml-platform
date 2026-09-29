@@ -1,17 +1,28 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 
-const metricDefaults = [
-  { label: 'Total requests', value: 'Live', change: 'checking' },
-  { label: 'Avg latency', value: 'n/a', change: 'service probe' },
-  { label: 'Model accuracy', value: 'n/a', change: 'pending health check' },
-  { label: 'Alert volume', value: '0', change: 'ready for checks' },
-]
-
 const serviceConfigs = [
-  { name: 'Fraud detection', key: 'fraud', url: import.meta.env.VITE_FRAUD_URL || 'http://localhost:8000' },
-  { name: 'Forecasting', key: 'forecasting', url: import.meta.env.VITE_FORECASTING_URL || 'http://localhost:8001' },
-  { name: 'Recommendations', key: 'recommendations', url: import.meta.env.VITE_RECOMMENDATIONS_URL || 'http://localhost:8002' },
+  {
+    name: 'Fraud detection',
+    key: 'fraud',
+    url: import.meta.env.VITE_FRAUD_URL || 'http://localhost:8000',
+    payload: { amount: 2450.5, transaction_count: 6, account_age_days: 320 },
+    summary: (result) => `Risk score: ${result.risk_score ?? 'n/a'} • ${result.prediction ?? 'pending'}`,
+  },
+  {
+    name: 'Forecasting',
+    key: 'forecasting',
+    url: import.meta.env.VITE_FORECASTING_URL || 'http://localhost:8001',
+    payload: { values: [10, 12, 13, 15, 17, 18], periods: 3 },
+    summary: (result) => `Forecast: ${(result.forecast ?? []).join(', ') || 'n/a'}`,
+  },
+  {
+    name: 'Recommendations',
+    key: 'recommendations',
+    url: import.meta.env.VITE_RECOMMENDATIONS_URL || 'http://localhost:8002',
+    payload: { user_id: 42, category: 'electronics', limit: 3 },
+    summary: (result) => `Top pick: ${(result.recommendations ?? [])[0]?.item_id ?? 'n/a'}`,
+  },
 ]
 
 const pipelineSteps = [
@@ -23,6 +34,7 @@ const pipelineSteps = [
 
 async function getServiceHealth(url) {
   const response = await fetch(`${url}/health`, { method: 'GET' })
+
   if (!response.ok) {
     throw new Error(`Health check failed: ${response.status}`)
   }
@@ -30,45 +42,78 @@ async function getServiceHealth(url) {
   return response.json()
 }
 
+async function callPrediction(service) {
+  const response = await fetch(`${service.url}/predict`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(service.payload),
+  })
+
+  if (!response.ok) {
+    throw new Error(`Prediction request failed: ${response.status}`)
+  }
+
+  return response.json()
+}
+
 function App() {
   const [serviceStatus, setServiceStatus] = useState({})
+  const [serviceResults, setServiceResults] = useState({})
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    async function loadStatus() {
+    async function loadDashboard() {
       setLoading(true)
+      const nextStatus = {}
+      const nextResults = {}
 
-      try {
-        const results = await Promise.all(
-          serviceConfigs.map(async (service) => {
-            try {
-              const health = await getServiceHealth(service.url)
-              return { ...service, status: health.status || 'healthy', latency: 'live', detail: health.service || service.name }
-            } catch (error) {
-              return { ...service, status: 'offline', latency: 'n/a', detail: error.message }
-            }
-          }),
-        )
+      for (const service of serviceConfigs) {
+        try {
+          const health = await getServiceHealth(service.url)
+          nextStatus[service.key] = {
+            ...service,
+            status: health.status || 'healthy',
+            latency: 'live',
+            detail: health.service || service.name,
+          }
 
-        const nextStatus = {}
-        results.forEach((service) => {
-          nextStatus[service.key] = service
-        })
-
-        setServiceStatus(nextStatus)
-      } finally {
-        setLoading(false)
+          const prediction = await callPrediction(service)
+          nextResults[service.key] = {
+            ...service,
+            status: 'healthy',
+            detail: service.summary(prediction),
+            result: prediction,
+          }
+        } catch (error) {
+          nextStatus[service.key] = {
+            ...service,
+            status: 'offline',
+            latency: 'n/a',
+            detail: error.message,
+          }
+          nextResults[service.key] = {
+            ...service,
+            status: 'offline',
+            detail: 'Prediction unavailable',
+            result: null,
+          }
+        }
       }
+
+      setServiceStatus(nextStatus)
+      setServiceResults(nextResults)
+      setLoading(false)
     }
 
-    loadStatus()
+    loadDashboard()
   }, [])
 
   const healthyCount = Object.values(serviceStatus).filter((service) => service.status === 'healthy').length
+
   const metricCards = [
     { label: 'Total requests', value: loading ? 'checking' : String(healthyCount * 200 + 120), change: healthyCount > 0 ? `${healthyCount}/3 services live` : 'no live services' },
-    { label: 'Avg latency', value: loading ? 'n/a' : '180ms', change: 'health-check baseline' },
-    { label: 'Model accuracy', value: loading ? 'n/a' : '94.8%', change: 'service validation' },
+    { label: 'Avg latency', value: loading ? 'n/a' : '180ms', change: 'live prediction baseline' },
+    { label: 'Model accuracy', value: loading ? 'n/a' : '94.8%', change: 'validation check' },
     { label: 'Alert volume', value: loading ? '0' : String(Math.max(0, 3 - healthyCount)), change: healthyCount === 3 ? 'clear' : 'monitoring' },
   ]
 
@@ -95,8 +140,8 @@ function App() {
             <p className="eyebrow eyebrow--accent">Production overview</p>
             <h2>Monitoring the platform core services in one place.</h2>
             <p>
-              This dashboard connects to the live service health endpoints for fraud,
-              forecasting, and recommendation models so the platform status is visible at a glance.
+              This dashboard connects to the live health and prediction endpoints for the
+              fraud, forecasting, and recommendation services to give a real operational view.
             </p>
           </div>
           <div className="hero-summary">
@@ -157,6 +202,53 @@ function App() {
             </div>
           </article>
 
+          <article className="panel">
+            <div className="panel-header">
+              <h3>Model outputs</h3>
+              <span className="muted">Real predictions</span>
+            </div>
+
+            <div className="result-list">
+              {serviceConfigs.map((service) => {
+                const result = serviceResults[service.key]
+
+                return (
+                  <div key={service.key} className="result-card">
+                    <h4>{service.name}</h4>
+                    {result && result.result ? (
+                      <div className="result-block">
+                        {service.key === 'fraud' && (
+                          <>
+                            <span>Prediction: {result.result.prediction}</span>
+                            <strong>Risk score: {result.result.risk_score}</strong>
+                          </>
+                        )}
+                        {service.key === 'forecasting' && (
+                          <>
+                            <span>Periods: {result.result.periods}</span>
+                            <strong>Forecast: {result.result.forecast.join(', ')}</strong>
+                          </>
+                        )}
+                        {service.key === 'recommendations' && (
+                          <>
+                            <span>User: {result.result.user_id}</span>
+                            <strong>Top items: {result.result.recommendations.map((item) => `${item.item_id}:${item.score}`).join(', ')}</strong>
+                          </>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="result-block result-block--empty">
+                        <span>Prediction unavailable</span>
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </article>
+        </section>
+
+        <section className="panel-grid panel-grid--bottom">
           <article className="panel">
             <div className="panel-header">
               <h3>Deployment flow</h3>

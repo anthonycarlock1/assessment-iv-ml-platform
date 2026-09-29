@@ -168,6 +168,10 @@
   gap: 18px;
 }
 
+.panel-grid--bottom {
+  grid-template-columns: 1fr;
+}
+
 .panel {
   padding: 22px;
   border: 1px solid rgba(148, 163, 184, 0.15);
@@ -274,6 +278,40 @@
   color: #e2e8f0;
   font-weight: 600;
   font-size: 0.82rem;
+}
+
+.result-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.result-card {
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(15, 23, 42, 0.62);
+}
+
+.result-card h4 {
+  margin: 0 0 10px;
+  color: #f8fafc;
+}
+
+.result-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #dbeafe;
+  font-size: 0.9rem;
+}
+
+.result-block strong {
+  color: #f8fafc;
+}
+
+.result-block--empty {
+  color: #fca5a5;
 }
 
 .pipeline-list {
