@@ -1,3 +1,7 @@
+# This file holds the settings for the cloud environment.
+# Think of these as the configuration values we pass into Terraform.
+# A beginner-friendly way to understand this: these are the "inputs".
+
 variable "aws_region" {
   description = "AWS region for the Assessment IV platform"
   type        = string
@@ -31,7 +35,7 @@ variable "eks_cluster_name" {
 variable "eks_version" {
   description = "Kubernetes version for the EKS cluster"
   type        = string
-  # Set to the cluster's current version to avoid invalid downgrade/rollback
+  # This version is pinned to avoid a bad version downgrade or mismatch.
   default     = "1.31"
 }
 

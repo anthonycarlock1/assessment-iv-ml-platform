@@ -20,7 +20,7 @@ spec:
       containers:
         - name: fraud-service
           image: 388691194728.dkr.ecr.us-east-1.amazonaws.com/anthony-assessment4-fraud:v1
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 8000
           envFrom:

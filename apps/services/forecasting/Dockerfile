@@ -2,10 +2,11 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-COPY requirements.txt .
+COPY apps/services/forecasting/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY apps/services/forecasting/ .
+COPY ml/models ./ml/models
 
 EXPOSE 8000
 

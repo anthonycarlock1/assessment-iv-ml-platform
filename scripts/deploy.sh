@@ -63,7 +63,7 @@ if [[ -z "$AWS_ACCOUNT_ID" ]]; then
   exit 1
 fi
 
-EKS_CLUSTER_NAME="${EKS_CLUSTER_NAME:-${OWNER:-anthony}-${PROJECT_NAME:-anthony-assessment4}-eks}"
+EKS_CLUSTER_NAME="${EKS_CLUSTER_NAME:-${OWNER:-anthony}-${PROJECT_NAME:-assessment4}-eks}"
 aws eks update-kubeconfig --region "$AWS_REGION" --name "$EKS_CLUSTER_NAME" >/dev/null
 
 kubectl apply -f k8s/namespaces/fraud-team.yaml
@@ -73,28 +73,29 @@ kubectl apply -f k8s/deployments/
 kubectl apply -f k8s/services/
 kubectl apply -f k8s/ingress/ingress.yaml
 
-declare -A IMAGE_REPOS=(
-  [fraud]="${OWNER:-anthony}-${PROJECT_NAME:-anthony-assessment4}-fraud"
-  [forecasting]="${OWNER:-anthony}-${PROJECT_NAME:-anthony-assessment4}-forecasting"
-  [recommendations]="${OWNER:-anthony}-${PROJECT_NAME:-anthony-assessment4}-recommendations"
-)
-
-declare -A DEPLOYMENTS=(
-  [fraud]="fraud-service"
-  [forecasting]="forecasting-service"
-  [recommendations]="recommendations-service"
-)
-
-declare -A CONTAINERS=(
-  [fraud]="fraud-service"
-  [forecasting]="forecasting"
-  [recommendations]="recommendations-service"
-)
-
 for SERVICE in fraud forecasting recommendations; do
-  REPO_NAME="${IMAGE_REPOS[$SERVICE]}"
-  DEPLOYMENT_NAME="${DEPLOYMENTS[$SERVICE]}"
-  CONTAINER_NAME="${CONTAINERS[$SERVICE]}"
+  case "$SERVICE" in
+    fraud)
+      REPO_NAME="${OWNER:-anthony}-${PROJECT_NAME:-assessment4}-fraud"
+      DEPLOYMENT_NAME="fraud-service"
+      CONTAINER_NAME="fraud-service"
+      ;;
+    forecasting)
+      REPO_NAME="${OWNER:-anthony}-${PROJECT_NAME:-assessment4}-forecasting"
+      DEPLOYMENT_NAME="forecasting-service"
+      CONTAINER_NAME="forecasting"
+      ;;
+    recommendations)
+      REPO_NAME="${OWNER:-anthony}-${PROJECT_NAME:-assessment4}-recommendations"
+      DEPLOYMENT_NAME="recommendations-service"
+      CONTAINER_NAME="recommendations-service"
+      ;;
+    *)
+      echo "Unsupported service: $SERVICE" >&2
+      exit 1
+      ;;
+  esac
+
   IMAGE_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPO_NAME}:${IMAGE_TAG}"
 
   echo "Updating ${DEPLOYMENT_NAME} with image ${IMAGE_URI}"

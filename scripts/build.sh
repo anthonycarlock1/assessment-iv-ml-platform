@@ -61,16 +61,25 @@ fi
 aws ecr get-login-password --region "$AWS_REGION" | docker login --username AWS --password-stdin "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
 
 OWNER="${OWNER:-anthony}"
-PROJECT_NAME="${PROJECT_NAME:-anthony-assessment4}"
-
-declare -A REPOS=(
-  [fraud]="${OWNER}-${PROJECT_NAME}-fraud"
-  [forecasting]="${OWNER}-${PROJECT_NAME}-forecasting"
-  [recommendations]="${OWNER}-${PROJECT_NAME}-recommendations"
-)
+PROJECT_NAME="${PROJECT_NAME:-assessment4}"
 
 for SERVICE in fraud forecasting recommendations; do
-  REPO_NAME="${REPOS[$SERVICE]}"
+  case "$SERVICE" in
+    fraud)
+      REPO_NAME="${OWNER}-${PROJECT_NAME}-fraud"
+      ;;
+    forecasting)
+      REPO_NAME="${OWNER}-${PROJECT_NAME}-forecasting"
+      ;;
+    recommendations)
+      REPO_NAME="${OWNER}-${PROJECT_NAME}-recommendations"
+      ;;
+    *)
+      echo "Unsupported service: $SERVICE" >&2
+      exit 1
+      ;;
+  esac
+
   echo "Ensuring repository exists: ${REPO_NAME}"
   aws ecr describe-repositories --region "$AWS_REGION" --repository-names "$REPO_NAME" >/dev/null 2>&1 || \
     aws ecr create-repository --region "$AWS_REGION" --repository-name "$REPO_NAME" --image-scanning-configuration scanOnPush=true --encryption-configuration encryptionType=AES256 >/dev/null
@@ -79,7 +88,7 @@ for SERVICE in fraud forecasting recommendations; do
   REMOTE_TAG="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPO_NAME}:${IMAGE_TAG}"
 
   echo "Building ${SERVICE} image: ${LOCAL_TAG}"
-  docker build -t "$LOCAL_TAG" -f "apps/services/${SERVICE}/Dockerfile" "apps/services/${SERVICE}"
+  docker build -t "$LOCAL_TAG" -f "apps/services/${SERVICE}/Dockerfile" "$ROOT_DIR"
 
   echo "Tagging ${LOCAL_TAG} -> ${REMOTE_TAG}"
   docker tag "$LOCAL_TAG" "$REMOTE_TAG"

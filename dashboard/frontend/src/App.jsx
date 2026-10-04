@@ -1,30 +1,42 @@
+// This file is the front-end dashboard for the ML platform.
+// It is the user-facing page that shows the service status and model outputs.
+// For a presentation: "This is the dashboard that shows whether the system is healthy and what the models are predicting."
+
 import { useEffect, useState } from 'react'
 import './App.css'
 
+const k8sServiceDefaults = {
+  fraud: 'http://fraud-service.fraud-team.svc.cluster.local',
+  forecasting: 'http://forecasting-service.fraud-team.svc.cluster.local',
+  recommendations: 'http://recommendations-service.fraud-team.svc.cluster.local',
+}
+
+// Each service has a name, URL, input payload, and a small summary function.
 const serviceConfigs = [
   {
     name: 'Fraud detection',
     key: 'fraud',
-    url: import.meta.env.VITE_FRAUD_URL || 'http://localhost:8000',
+    url: import.meta.env.VITE_FRAUD_URL || k8sServiceDefaults.fraud,
     payload: { amount: 2450.5, transaction_count: 6, account_age_days: 320 },
     summary: (result) => `Risk score: ${result.risk_score ?? 'n/a'} • ${result.prediction ?? 'pending'}`,
   },
   {
     name: 'Forecasting',
     key: 'forecasting',
-    url: import.meta.env.VITE_FORECASTING_URL || 'http://localhost:8001',
+    url: import.meta.env.VITE_FORECASTING_URL || k8sServiceDefaults.forecasting,
     payload: { values: [10, 12, 13, 15, 17, 18], periods: 3 },
     summary: (result) => `Forecast: ${(result.forecast ?? []).join(', ') || 'n/a'}`,
   },
   {
     name: 'Recommendations',
     key: 'recommendations',
-    url: import.meta.env.VITE_RECOMMENDATIONS_URL || 'http://localhost:8002',
+    url: import.meta.env.VITE_RECOMMENDATIONS_URL || k8sServiceDefaults.recommendations,
     payload: { user_id: 42, category: 'electronics', limit: 3 },
     summary: (result) => `Top pick: ${(result.recommendations ?? [])[0]?.item_id ?? 'n/a'}`,
   },
 ]
 
+// This is the high-level deployment flow we want to explain.
 const pipelineSteps = [
   'Terraform provisions VPC, EKS, IAM, and ECR',
   'Docker images are built and pushed to AWS ECR',
@@ -32,6 +44,7 @@ const pipelineSteps = [
   'Dashboard reads health and prediction summaries',
 ]
 
+// Check the health endpoint for a service.
 async function getServiceHealth(url) {
   const response = await fetch(`${url}/health`, { method: 'GET' })
 
@@ -42,6 +55,7 @@ async function getServiceHealth(url) {
   return response.json()
 }
 
+// Send sample data to each model endpoint.
 async function callPrediction(service) {
   const response = await fetch(`${service.url}/predict`, {
     method: 'POST',
@@ -57,11 +71,14 @@ async function callPrediction(service) {
 }
 
 function App() {
+  // This state stores whether each service is healthy or not.
   const [serviceStatus, setServiceStatus] = useState({})
+  // This state stores the result from each service's model.
   const [serviceResults, setServiceResults] = useState({})
   const [loading, setLoading] = useState(true)
   const [lastUpdated, setLastUpdated] = useState('never')
 
+  // Run one full refresh of all services.
   async function loadDashboard() {
     setLoading(true)
     const nextStatus = {}
@@ -106,6 +123,7 @@ function App() {
     setLoading(false)
   }
 
+  // Refresh the dashboard every 15 seconds.
   useEffect(() => {
     loadDashboard()
     const intervalId = window.setInterval(() => {
@@ -117,6 +135,7 @@ function App() {
 
   const healthyCount = Object.values(serviceStatus).filter((service) => service.status === 'healthy').length
 
+  // Cards used in the dashboard summary.
   const metricCards = [
     { label: 'Total requests', value: loading ? 'checking' : String(healthyCount * 200 + 120), change: healthyCount > 0 ? `${healthyCount}/3 services live` : 'no live services' },
     { label: 'Avg latency', value: loading ? 'n/a' : '180ms', change: 'live prediction baseline' },

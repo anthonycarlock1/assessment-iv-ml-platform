@@ -1,7 +1,13 @@
+# This Terraform file creates the AWS foundation for the project.
+# In simple terms: it builds the network, the cluster, and the container registry.
+# If you are explaining it in a presentation, think of this as the "cloud setup" layer.
+
 data "aws_availability_zones" "available" {
   state = "available"
 }
 
+# These are shared values used on many AWS resources.
+# Example: every resource gets a project name, environment, and owner tag.
 locals {
   azs = slice(data.aws_availability_zones.available.names, 0, 2)
   common_tags = {
@@ -12,6 +18,8 @@ locals {
   }
 }
 
+# Create the private network in AWS.
+# This is like creating the office building foundation for all services.
 resource "aws_vpc" "assessment" {
   cidr_block           = var.vpc_cidr
   enable_dns_support   = true
@@ -22,6 +30,7 @@ resource "aws_vpc" "assessment" {
   })
 }
 
+# The internet gateway lets resources in the VPC talk to the internet.
 resource "aws_internet_gateway" "assessment" {
   vpc_id = aws_vpc.assessment.id
 
@@ -30,6 +39,8 @@ resource "aws_internet_gateway" "assessment" {
   })
 }
 
+# Subnets are like separate rooms inside the network.
+# We create public subnets so EKS nodes can be reached from the internet.
 resource "aws_subnet" "public" {
   count                   = length(local.azs)
   vpc_id                  = aws_vpc.assessment.id
@@ -44,6 +55,8 @@ resource "aws_subnet" "public" {
   })
 }
 
+# Route table tells the VPC how to send traffic.
+# Here, we send all traffic to the internet gateway.
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.assessment.id
 
@@ -63,9 +76,10 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public.id
 }
 
+# Security groups act like firewall rules.
+# They define what traffic is allowed in and out.
 resource "aws_security_group" "cluster" {
-  # preserve existing name to avoid forced replacement when owner/project
-  # values change; keep owner as a tag instead
+  # We keep the safe name format so Terraform does not replace it unnecessarily.
   name        = "${var.project_name}-eks-cluster-sg"
   description = "Security group for the Assessment IV EKS cluster"
   vpc_id      = aws_vpc.assessment.id
@@ -89,6 +103,8 @@ resource "aws_security_group" "cluster" {
   })
 }
 
+# IAM role for the EKS cluster itself.
+# This gives AWS permission to manage the cluster.
 resource "aws_iam_role" "cluster" {
   name = "${var.owner}-${var.project_name}-eks-cluster-role"
 
@@ -115,16 +131,18 @@ resource "aws_iam_role_policy_attachment" "cluster_policy" {
   role       = aws_iam_role.cluster.name
 }
 
+# This is the main Kubernetes cluster.
+# EKS is the managed Kubernetes service from AWS.
 resource "aws_eks_cluster" "assessment" {
   name     = "${var.owner}-${var.eks_cluster_name}"
   role_arn = aws_iam_role.cluster.arn
   version  = var.eks_version
 
   vpc_config {
-    subnet_ids              = aws_subnet.public[*].id
-    security_group_ids      = [aws_security_group.cluster.id]
-    endpoint_public_access  = true
-    public_access_cidrs     = ["0.0.0.0/0"]
+    subnet_ids             = aws_subnet.public[*].id
+    security_group_ids     = [aws_security_group.cluster.id]
+    endpoint_public_access = true
+    public_access_cidrs    = ["0.0.0.0/0"]
   }
 
   depends_on = [
@@ -132,11 +150,13 @@ resource "aws_eks_cluster" "assessment" {
   ]
 
   tags = merge(local.common_tags, {
-    Name = "${var.owner}-${var.eks_cluster_name}",
+    Name  = "${var.owner}-${var.eks_cluster_name}",
     Owner = var.owner
   })
 }
 
+# IAM role for the worker nodes in the EKS cluster.
+# These nodes run our Docker containers.
 resource "aws_iam_role" "node_group" {
   name = "${var.owner}-${var.project_name}-eks-node-role"
 
@@ -158,6 +178,7 @@ resource "aws_iam_role" "node_group" {
   })
 }
 
+# Attach the AWS policies needed for EKS worker nodes.
 resource "aws_iam_role_policy_attachment" "node_group_eks_worker" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
   role       = aws_iam_role.node_group.name
@@ -173,6 +194,7 @@ resource "aws_iam_role_policy_attachment" "node_group_ecr_readonly" {
   role       = aws_iam_role.node_group.name
 }
 
+# This creates the EC2 machines that run Kubernetes workloads.
 resource "aws_eks_node_group" "main" {
   cluster_name    = aws_eks_cluster.assessment.name
   node_group_name = "${var.owner}-${var.project_name}-ng"
@@ -204,6 +226,7 @@ resource "aws_eks_node_group" "main" {
   })
 }
 
+# Optional IAM access so a user can manage the cluster.
 resource "aws_eks_access_entry" "student" {
   count = var.student_iam_arn != "" ? 1 : 0
 
@@ -225,6 +248,8 @@ resource "aws_eks_access_policy_association" "student_cluster_admin" {
   }
 }
 
+# ECR is AWS's container registry.
+# We store each app image here before deploying it to Kubernetes.
 resource "aws_ecr_repository" "forecasting" {
   name                 = "${var.owner}-assessment4-forecasting"
   image_tag_mutability = "MUTABLE"

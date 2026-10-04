@@ -157,6 +157,23 @@ This platform should eventually support:
 - observability through logs, metrics, and dashboards
 - environment separation between dev, staging, and prod
 
+## Demo Scope and Assumptions
+
+This repository is intentionally designed as a demo-first ML platform blueprint rather than a production database-backed application.
+
+The current implementation demonstrates the following:
+
+- AWS infrastructure provisioning with Terraform
+- managed Kubernetes with EKS
+- containerized model-serving microservices
+- health and readiness checks
+- ingress routing and dashboard visibility
+- a reusable cloud architecture pattern for presentation and learning
+
+The database and external API values are intentionally left as placeholders because the repo is not wired to a real backend service in its current state. That is by design for a demo environment. If a real database, API key, or external dependency is needed later, it should be added as a separate production hardening step.
+
+This means the project is fully valid as a demo architecture, but it should not be described as a live production application unless real credentials, live data storage, and stricter security controls are added.
+
 ## Planned Segment Work
 
 The work should be split into the following segments:
@@ -262,6 +279,34 @@ kubectl apply -f k8s/services/
 kubectl apply -f k8s/ingress/ingress.yaml
 ```
 
+### 6. Replace placeholder secrets before production
+
+The secret manifest in [k8s/secrets/fraud-service-secret.yaml](k8s/secrets/fraud-service-secret.yaml) is intentionally set to non-production placeholders. Replace the values with real credentials before deploying outside a demo environment:
+
+```bash
+kubectl create secret generic fraud-service-secret \
+  --namespace fraud-team \
+  --from-literal=API_KEY="<real-api-key>" \
+  --from-literal=DB_PASSWORD="<real-db-password>" \
+  --dry-run=client -o yaml > k8s/secrets/fraud-service-secret.yaml
+```
+
+Then re-apply the secret and verify it is present:
+
+```bash
+kubectl apply -f k8s/secrets/fraud-service-secret.yaml
+kubectl get secret -n fraud-team fraud-service-secret
+```
+
+### 7. Final operational checklist
+
+- confirm AWS CLI and kubeconfig credentials are valid
+- verify the cluster is Ready and node groups are healthy
+- confirm the ingress controller is installed and the ELB address is assigned
+- confirm the secret values are real and not placeholder strings
+- validate each service health endpoint through the public ingress
+- review resource tags and naming conventions to match the assessment owner
+
 ### 6. Verify pods and services
 
 ```bash
@@ -308,3 +353,5 @@ terraform destroy
 ## Notes
 
 This repository is intentionally structured as a platform blueprint, not just a single app. The intent is to separate infrastructure, application services, model work, and operational concerns so the system can scale from proof-of-concept into a production deployment model.
+
+For this assessment, the project is intentionally kept as a demo architecture. The core value is showing how AWS, Kubernetes, microservices, and a dashboard fit together in a real-world deployment pattern without requiring a production database or real external credentials at the start.
