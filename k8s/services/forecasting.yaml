@@ -1,12 +1,22 @@
+# Defines this Service in forecasting-team.
+# Tells Kubernetes which resource type and schema to use.
 apiVersion: v1
 kind: Service
 metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
   name: forecasting-service
-  namespace: fraud-team
+  namespace: forecasting-team
+  labels:
+    app.kubernetes.io/part-of: anthony-assessment4
+    owner: anthony
+    team: forecasting-team
 spec:
+  # Sends traffic only to pods matching this application’s labels.
   selector:
     app: forecasting-service
+  # Maps the Service port to the target container port.
   ports:
-    - port: 80
-      targetPort: 8000
+  - port: 80
+    targetPort: 8000
+  # Uses an internal stable ClusterIP address.
   type: ClusterIP

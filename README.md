@@ -1,357 +1,113 @@
 # Assessment IV ML Platform
 
-This repository is a production-ready blueprint for an AWS-based machine learning platform running on Kubernetes. The system is designed around a set of independent microservices that expose prediction APIs, are deployed in Kubernetes, and integrate with AWS services such as ECR, EKS, IAM, and managed ML infrastructure.
+**Live deployment:** all three SageMaker endpoints are InService, EKS workloads use `MODEL_PROVIDER=sagemaker`, and the deployed frontend/API path has been verified with real predictions. [Verification results](docs/live-integration-verification.json), [ownership inventory](docs/aws-resource-ownership.json), and [deployment instructions](docs/sagemaker-deployment.md). Every new AWS resource has `Owner=anthony`.
 
-## Architecture Overview
-
-The platform follows a modular, service-oriented architecture:
-
-- Client or internal application sends requests to the platform
-- Ingress routes traffic to the appropriate service
-- Each service is isolated in its own Kubernetes namespace and deployment
-- Models are served as microservices and can later integrate with SageMaker or other ML runtimes
-- AWS manages container registry, identity, and cluster infrastructure
+The deployed application serves user-entered requests through this path:
 
 ```mermaid
 flowchart LR
-    User[Client / Dashboard / Internal App]
-    Ingress[Ingress / Load Balancer]
-    NS[fraud-team namespace]
-    Fraud[Fraud Detection Service]
-    Forecast[Forecasting Service]
-    Rec[Recommendations Service]
-    EKS[EKS Cluster]
-    ECR[ECR Container Registry]
-    IAM[IAM / Access Roles]
-    Model[Model Endpoint / SageMaker / ML Runtime]
-
-    User --> Ingress
-    Ingress --> Fraud
-    Ingress --> Forecast
-    Ingress --> Rec
-
-    Fraud --> EKS
-    Forecast --> EKS
-    Rec --> EKS
-
-    Fraud --> Model
-    Forecast --> Model
-    Rec --> Model
-
-    EKS --> ECR
-    EKS --> IAM
+  Browser --> Ingress
+  Ingress --> Frontend[Static React frontend]
+  Ingress --> Gateway[API gateway /api]
+  Gateway --> Fraud[Fraud FastAPI]
+  Gateway --> Forecast[Forecasting FastAPI]
+  Gateway --> Recommendations[Recommendations FastAPI]
+  Fraud --> Models[SageMaker serverless endpoints]
+  Forecast --> Models
+  Recommendations --> Models
 ```
 
-## Service Layout
+Kubernetes uses the `sagemaker` provider: FastAPI services invoke the three real SageMaker serverless endpoints. The existing trained artifacts execute inside SageMaker hosting containers. The `local` provider remains available for development and tests. Responses identify the model and provider. No database or application API key is required. The CSV catalog supplies training-compatible recommendation category/item codes, not fixed predictions.
 
-```mermaid
-flowchart TB
-    subgraph Platform
-        subgraph Services
-            Fraud[fraud-service]
-            Forecast[forecasting-service]
-            Rec[recommendations-service]
-        end
+`apps/services/` is canonical. Legacy `services/` entry points delegate to it. All Docker builds use the repository root as context. Models were saved with scikit-learn 1.6.1; runtime dependencies preserve that version. Recommendation preprocessing assumes the checked-in catalog matches the training dataset. If retraining, preserve encoders alongside the new artifact.
 
-        subgraph DataLayer
-            DB[(Optional PostgreSQL / Feature Store)]
-            S3[(S3 / Artifacts)]
-            Model[Model Endpoint]
-        end
-    end
-
-    Fraud --> DB
-    Forecast --> S3
-    Rec --> DB
-    Fraud --> Model
-    Forecast --> Model
-    Rec --> Model
-```
-
-## Production-Ready Folder Structure
-
-```text
-assessment-iv-ml-platform/
-├── README.md
-├── .gitignore
-├── .github/
-│   └── workflows/
-│       └── ci-cd.yml
-├── apps/
-│   ├── dashboard/
-│   │   ├── frontend/
-│   │   └── backend/
-│   └── services/
-│       ├── fraud/
-│       │   ├── app/
-│       │   ├── tests/
-│       │   ├── Dockerfile
-│       │   ├── requirements.txt
-│       │   └── README.md
-│       ├── forecasting/
-│       │   ├── app/
-│       │   ├── tests/
-│       │   ├── Dockerfile
-│       │   ├── requirements.txt
-│       │   └── README.md
-│       └── recommendations/
-│           ├── app/
-│           ├── tests/
-│           ├── Dockerfile
-│           ├── requirements.txt
-│           └── README.md
-├── terraform/
-│   ├── modules/
-│   │   ├── vpc/
-│   │   │   ├── vpc.tf
-│   │   │   └── variables.tf
-│   │   ├── eks/
-│   │   ├── ecr/
-│   │   ├── iam/
-│   │   └── observability/
-│   └── environments/
-│       ├── dev/
-│       ├── staging/
-│       └── prod/
-├── k8s/
-│   ├── namespaces/
-│   ├── services/
-│   ├── deployments/
-│   ├── ingress/
-│   ├── configmaps/
-│   ├── secrets/
-│   └── observability/
-├── data/
-│   ├── raw/
-│   ├── processed/
-│   └── schemas/
-├── ml/
-│   ├── training/
-│   ├── notebooks/
-│   ├── pipelines/
-│   └── models/
-├── docs/
-│   ├── architecture/
-│   ├── runbooks/
-│   ├── api/
-│   └── security/
-├── scripts/
-│   ├── build.sh
-│   ├── deploy.sh
-│   └── bootstrap.sh
-└── monitoring/
-    ├── dashboards/
-    ├── alerts/
-    └── logs/
-```
-
-## Production Goals
-
-This platform should eventually support:
-
-- secure AWS identity and access patterns
-- isolated service deployments per namespace
-- containerized ML services with health probes and readiness checks
-- CI/CD for build, test, and deployment automation
-- model serving integration with either SageMaker or a custom inference API
-- observability through logs, metrics, and dashboards
-- environment separation between dev, staging, and prod
-
-## Demo Scope and Assumptions
-
-This repository is intentionally designed as a demo-first ML platform blueprint rather than a production database-backed application.
-
-The current implementation demonstrates the following:
-
-- AWS infrastructure provisioning with Terraform
-- managed Kubernetes with EKS
-- containerized model-serving microservices
-- health and readiness checks
-- ingress routing and dashboard visibility
-- a reusable cloud architecture pattern for presentation and learning
-
-The database and external API values are intentionally left as placeholders because the repo is not wired to a real backend service in its current state. That is by design for a demo environment. If a real database, API key, or external dependency is needed later, it should be added as a separate production hardening step.
-
-This means the project is fully valid as a demo architecture, but it should not be described as a live production application unless real credentials, live data storage, and stricter security controls are added.
-
-## Planned Segment Work
-
-The work should be split into the following segments:
-
-1. Foundation and infrastructure
-   - Terraform for VPC, EKS, ECR, IAM, and networking
-   - cluster bootstrap and namespace setup
-
-2. Application services
-   - fraud detection API
-   - forecasting API
-   - recommendations API
-
-3. Model and ML layer
-   - feature engineering
-   - training pipeline
-   - model registry and deployment
-
-4. Deployment and reliability
-   - Kubernetes manifests
-   - ingress and autoscaling
-   - health checks and resilience patterns
-
-5. Operations and observability
-   - logs, metrics, traces
-   - dashboards and alerts
-   - runbooks and incident response
-
-6. Security and governance
-   - secrets management
-   - least-privilege IAM
-   - network policies and policy guardrails
-
-## Manual Deployment Guide
-
-Use the following steps to deploy the applications manually from this repository.
-
-### 1. Configure AWS credentials
-
-Make sure your AWS CLI is authenticated and the default region matches the Terraform configuration:
+## Validate locally
 
 ```bash
-aws configure
-aws sts get-caller-identity
+python3.11 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -m pytest -q apps tests
+cd dashboard/frontend
+npm ci
+npm run build
+npm run lint
+```
+
+For development, run each command in a separate terminal from the repository root:
+
+```bash
+.venv/bin/uvicorn apps.services.fraud.main:app --port 8001
+.venv/bin/uvicorn apps.services.forecasting.main:app --port 8002
+.venv/bin/uvicorn apps.services.recommendations.main:app --port 8003
+FRAUD_SERVICE_URL=http://127.0.0.1:8001 FORECASTING_SERVICE_URL=http://127.0.0.1:8002 RECOMMENDATIONS_SERVICE_URL=http://127.0.0.1:8003 .venv/bin/uvicorn apps.gateway.main:app --port 8000
+```
+
+Run `npm run dev` in `dashboard/frontend`. Vite proxies `/api` to the gateway. Production uses the hosted nginx frontend and either a public Service or ingress.
+
+## Deploy to existing AWS infrastructure
+
+Prerequisites you must configure:
+
+- Authenticated AWS CLI credentials with ECR push and EKS access; prefer your existing SSO/profile. Do not put access keys in application manifests.
+- Existing `anthony-assessment4-eks` cluster and the three `anthony-assessment4-{fraud,forecasting,recommendations}` repositories in `us-east-1`.
+- Public exposure: either an existing nginx ingress controller, or the optional public frontend Service below. The frontend nginx server proxies `/api/` to the gateway, so an ingress controller is not required for the public-Service option.
+- Docker Desktop running with Buildx, kubectl, and the validated Python environment.
+
+Read-only checks:
+
+```bash
 export AWS_REGION=us-east-1
+aws sts get-caller-identity
+bash scripts/bootstrap.sh
+aws ecr describe-repositories --region us-east-1 --repository-names anthony-assessment4-fraud anthony-assessment4-forecasting anthony-assessment4-recommendations
 ```
 
-### 2. Create or validate the EKS cluster and node group
-
-From the Terraform directory, initialize and apply the infrastructure:
+Build and deploy a unique release:
 
 ```bash
-cd terraform
-terraform init
-terraform plan
-terraform apply
+export IMAGE_TAG=integration-v2
+bash scripts/build.sh
+bash scripts/deploy.sh
 ```
 
-This creates the VPC, EKS cluster, node group, and ECR repositories for the assessment services.
+The scripts never create/delete clusters or repositories and never run Terraform apply/destroy. Gateway and frontend images reuse the fraud repository with distinct `gateway-` and `frontend-` tag prefixes. Set `ECR_PREFIX`, `AWS_ACCOUNT_ID`, or `EKS_CLUSTER_NAME` if existing resource names differ. Rendered images are applied directly, avoiding a rollout to stale v1 images first. Tests run before Kubernetes changes. Placeholder secrets are no longer mounted or applied.
 
-### 3. Update kubeconfig for the cluster
-
-After the cluster is created, connect your local kubectl to it:
+**Verified during this update:** the cluster is active and the three repositories exist, but there is no ingress controller or public load balancer. After deploying, you must expose the hosted frontend. The following optional action creates an AWS load balancer and can incur AWS charges; it does not recreate existing infrastructure:
 
 ```bash
-aws eks update-kubeconfig --name anthony-assessment4-eks --region us-east-1
-kubectl get nodes
+kubectl apply -f k8s/exposure/frontend-public.yaml
+kubectl -n platform-team get service frontend-public --watch
 ```
 
-### 4. Build Docker images locally
+Once `EXTERNAL-IP` contains a hostname, open `http://HOSTNAME` in your browser. The static frontend server forwards `/api/` to the deployed gateway. If you already configure a working ingress controller separately, the included ingress manifests provide the same paths.
 
-Build each service image from its app directory:
+Open the frontend public address in a browser. Use the forms and inspect `/api/fraud/predict`, `/api/forecasting/predict`, or `/api/recommendations/predict` in the network panel. Each successful response includes a request ID header, live provider/model output, and measured browser request duration.
+
+If ingress is unavailable, temporarily validate **deployed** workloads using a gateway port-forward plus Vite's development proxy; this is a diagnostic, not the hosted frontend demonstration.
 
 ```bash
-cd ../apps/services/forecasting
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 388691194728.dkr.ecr.us-east-1.amazonaws.com
-
-docker build -t anthony-assessment4-forecasting:v1 .
-docker tag anthony-assessment4-forecasting:v1 388691194728.dkr.ecr.us-east-1.amazonaws.com/anthony-assessment4-forecasting:v1
-docker push 388691194728.dkr.ecr.us-east-1.amazonaws.com/anthony-assessment4-forecasting:v1
-
-cd ../fraud
-docker build -t anthony-assessment4-fraud:v1 .
-docker tag anthony-assessment4-fraud:v1 388691194728.dkr.ecr.us-east-1.amazonaws.com/anthony-assessment4-fraud:v1
-docker push 388691194728.dkr.ecr.us-east-1.amazonaws.com/anthony-assessment4-fraud:v1
-
-cd ../recommendations
-docker build -t anthony-assessment4-recommendations:v1 .
-docker tag anthony-assessment4-recommendations:v1 388691194728.dkr.ecr.us-east-1.amazonaws.com/anthony-assessment4-recommendations:v1
-docker push 388691194728.dkr.ecr.us-east-1.amazonaws.com/anthony-assessment4-recommendations:v1
+kubectl get pods,services,ingress -A
+kubectl -n platform-team logs deployment/gateway-service
+curl http://YOUR_PUBLIC_ADDRESS/api/ready
+curl -X POST http://YOUR_PUBLIC_ADDRESS/api/fraud/predict -H 'Content-Type: application/json' -d '{"amount":1800,"transaction_count":35,"account_age_days":12}'
 ```
 
-### 5. Apply Kubernetes manifests
+CI/CD uses existing GitHub secrets `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`. Configure those only if using automatic deployment; local deployment can use your AWS profile. The workflow pushes/deploys on main/master after checks. It does not provision infrastructure.
 
-From the repo root:
+## SageMaker endpoint configuration
 
-```bash
-kubectl apply -f k8s/namespaces/fraud-team.yaml
-kubectl apply -f k8s/configmaps/
-kubectl apply -f k8s/secrets/
-kubectl apply -f k8s/deployments/
-kubectl apply -f k8s/services/
-kubectl apply -f k8s/ingress/ingress.yaml
-```
+The deployed endpoints now serve each service's JSON request/response contract. See `docs/sagemaker-deployment.md` for resource names and repeatable provisioning. Set `MODEL_PROVIDER=sagemaker`, `AWS_REGION=us-east-1`, and the corresponding `FRAUD_SAGEMAKER_ENDPOINT`, `FORECASTING_SAGEMAKER_ENDPOINT`, or `RECOMMENDATIONS_SAGEMAKER_ENDPOINT` in its ConfigMap. Responses must match the service response schema (provider is added by the adapter layer). No generic endpoint format is assumed.
 
-### 6. Replace placeholder secrets before production
+Use an EKS workload IAM role through Pod Identity or IRSA granting `sagemaker:InvokeEndpoint` on the specific endpoint ARN. No static AWS keys belong in these manifests. This IAM setup is unnecessary for the default packaged-model path.
 
-The secret manifest in [k8s/secrets/fraud-service-secret.yaml](k8s/secrets/fraud-service-secret.yaml) is intentionally set to non-production placeholders. Replace the values with real credentials before deploying outside a demo environment:
+`/health` checks process liveness. `/ready` checks loaded local artifacts or required SageMaker configuration; it does not prove a remote endpoint is reachable or IAM access works. The gateway readiness checks all downstream readiness routes. SageMaker connect/read timeouts are 3/70 seconds, with one attempt; errors become sanitized 502 responses and never fall back to local inference.
 
-```bash
-kubectl create secret generic fraud-service-secret \
-  --namespace fraud-team \
-  --from-literal=API_KEY="<real-api-key>" \
-  --from-literal=DB_PASSWORD="<real-db-password>" \
-  --dry-run=client -o yaml > k8s/secrets/fraud-service-secret.yaml
-```
+The checked-in Terraform foundation is unchanged. Confirm existing state and resources before planning any infrastructure updates. Application integration does not require recreating VPC, EKS, node groups, or ECR.
 
-Then re-apply the secret and verify it is present:
+See [Kubernetes deployment and verification](docs/kubernetes-deployment.md) for namespace separation, admission checks, probe semantics, and the deployed frontend access command.
 
-```bash
-kubectl apply -f k8s/secrets/fraud-service-secret.yaml
-kubectl get secret -n fraud-team fraud-service-secret
-```
+See [operations dashboard requirements and verification](docs/dashboard-operations.md) for API metadata, independent live polling, and failure isolation.
 
-### 7. Final operational checklist
+For presentation preparation, see the [simplified file-by-file code talking points](docs/project-code-talking-points.md).
 
-- confirm AWS CLI and kubeconfig credentials are valid
-- verify the cluster is Ready and node groups are healthy
-- confirm the ingress controller is installed and the ELB address is assigned
-- confirm the secret values are real and not placeholder strings
-- validate each service health endpoint through the public ingress
-- review resource tags and naming conventions to match the assessment owner
-
-### 6. Verify pods and services
-
-```bash
-kubectl get ns
-kubectl get pods -n fraud-team
-kubectl get svc -n fraud-team
-kubectl get ingress -n fraud-team
-```
-
-### 7. Test endpoints locally
-
-If you port-forward the service, you can test health endpoints directly:
-
-```bash
-kubectl port-forward -n fraud-team svc/fraud-service 8000:80
-curl http://localhost:8000/health
-
-kubectl port-forward -n fraud-team svc/forecasting-service 8001:80
-curl http://localhost:8001/health
-
-kubectl port-forward -n fraud-team svc/recommendations-service 8002:80
-curl http://localhost:8002/health
-```
-
-### 8. Clean up
-
-To remove the deployed resources:
-
-```bash
-kubectl delete -f k8s/
-cd terraform
-terraform destroy
-```
-
-## Recommended Next Steps
-
-- Create the actual production folder layout under `apps/`, `infra/`, `ml/`, and `docs/`
-- Move the current FastAPI service code into the `apps/services/*` structure
-- Add terraform modules for AWS base infrastructure
-- Define Kubernetes namespace and ingress YAMLs
-- Add CI pipeline for build and deploy automation
-- Document service contracts and deployment commands
-
-## Notes
-
-This repository is intentionally structured as a platform blueprint, not just a single app. The intent is to separate infrastructure, application services, model work, and operational concerns so the system can scale from proof-of-concept into a production deployment model.
-
-For this assessment, the project is intentionally kept as a demo architecture. The core value is showing how AWS, Kubernetes, microservices, and a dashboard fit together in a real-world deployment pattern without requiring a production database or real external credentials at the start.
+For a complete presentation teardown and rebuild cycle, follow the [destroy/rebuild runbook](docs/teardown-rebuild-runbook.md). It covers SageMaker cleanup, Terraform plans, image builds, workload identity, deployment, and live verification.

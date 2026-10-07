@@ -1,302 +1,120 @@
-// This file is the front-end dashboard for the ML platform.
-// It is the user-facing page that shows the service status and model outputs.
-// For a presentation: "This is the dashboard that shows whether the system is healthy and what the models are predicting."
-
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
+import { createPoller } from './polling.js'
 
-const k8sServiceDefaults = {
-  fraud: 'http://fraud-service.fraud-team.svc.cluster.local',
-  forecasting: 'http://forecasting-service.fraud-team.svc.cluster.local',
-  recommendations: 'http://recommendations-service.fraud-team.svc.cluster.local',
-}
-
-// Each service has a name, URL, input payload, and a small summary function.
-const serviceConfigs = [
-  {
-    name: 'Fraud detection',
-    key: 'fraud',
-    url: import.meta.env.VITE_FRAUD_URL || k8sServiceDefaults.fraud,
-    payload: { amount: 2450.5, transaction_count: 6, account_age_days: 320 },
-    summary: (result) => `Risk score: ${result.risk_score ?? 'n/a'} • ${result.prediction ?? 'pending'}`,
-  },
-  {
-    name: 'Forecasting',
-    key: 'forecasting',
-    url: import.meta.env.VITE_FORECASTING_URL || k8sServiceDefaults.forecasting,
-    payload: { values: [10, 12, 13, 15, 17, 18], periods: 3 },
-    summary: (result) => `Forecast: ${(result.forecast ?? []).join(', ') || 'n/a'}`,
-  },
-  {
-    name: 'Recommendations',
-    key: 'recommendations',
-    url: import.meta.env.VITE_RECOMMENDATIONS_URL || k8sServiceDefaults.recommendations,
-    payload: { user_id: 42, category: 'electronics', limit: 3 },
-    summary: (result) => `Top pick: ${(result.recommendations ?? [])[0]?.item_id ?? 'n/a'}`,
-  },
+// Lists friendly service names and sample form inputs. These are request examples, not saved model
+// results.
+const services = [
+  {key: 'fraud', name: 'Fraud detection', fields: {amount: '2450.5', transaction_count: '6', account_age_days: '320'}},
+  {key: 'forecasting', name: 'Forecasting', fields: {values: '10,12,13,15,17,18', periods: '3'}},
+  {key: 'recommendations', name: 'Recommendations', fields: {user_id: '42', category: 'electronics', limit: '3'}},
 ]
-
-// This is the high-level deployment flow we want to explain.
-const pipelineSteps = [
-  'Terraform provisions VPC, EKS, IAM, and ECR',
-  'Docker images are built and pushed to AWS ECR',
-  'Kubernetes deployments serve the ML APIs',
-  'Dashboard reads health and prediction summaries',
-]
-
-// Check the health endpoint for a service.
-async function getServiceHealth(url) {
-  const response = await fetch(`${url}/health`, { method: 'GET' })
-
-  if (!response.ok) {
-    throw new Error(`Health check failed: ${response.status}`)
-  }
-
-  return response.json()
+// Uses a configured API base or same-origin /api.
+const api = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/$/, '')
+// Fetches JSON with a timeout/cancellation, reads request IDs, and turns API errors into visible
+// messages.
+async function request(path, options = {}, timeout = 90000) {
+  const response = await fetch(`${api}${path}`, {...options, signal: options.signal ? AbortSignal.any([options.signal, AbortSignal.timeout(timeout)]) : AbortSignal.timeout(timeout)})
+  const body = await response.json()
+  if (!response.ok) throw new Error(typeof body.detail === 'string' ? body.detail : JSON.stringify(body.detail || body))
+  return {body, requestId: response.headers.get('x-request-id')}
 }
-
-// Send sample data to each model endpoint.
-async function callPrediction(service) {
-  const response = await fetch(`${service.url}/predict`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(service.payload),
-  })
-
-  if (!response.ok) {
-    throw new Error(`Prediction request failed: ${response.status}`)
+// Keeps editable inputs, results, errors, elapsed time, and busy state separate for each service.
+function ModelForm({service}) {
+  const [fields, setFields] = useState(service.fields)
+  const [result, setResult] = useState(null)
+  const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [elapsed, setElapsed] = useState(null)
+  // Converts text inputs into the business payload, rejects empty forecast values, and sends the
+  // correct prediction request.
+  async function submit(event) {
+    event.preventDefault()
+    setBusy(true); setError(''); setResult(null); setElapsed(null)
+    const start = performance.now()
+    try {
+      const payload = Object.fromEntries(Object.entries(fields).map(([key, value]) => [key,
+        key === 'category' ? value.trim() : key === 'values' ? value.split(',').map(v => Number(v.trim())) : Number(value)]))
+      if (service.key === 'forecasting' && fields.values.split(',').some(v => !v.trim())) throw new Error('Enter comma-separated numbers without empty values.')
+      const response = await request(`/${service.key}/predict`, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload)})
+      setResult(response)
+    } catch (err) {setError(err.message)}
+    finally {setElapsed(Math.round(performance.now() - start)); setBusy(false)}
   }
-
-  return response.json()
-}
-
-function App() {
-  // This state stores whether each service is healthy or not.
-  const [serviceStatus, setServiceStatus] = useState({})
-  // This state stores the result from each service's model.
-  const [serviceResults, setServiceResults] = useState({})
-  const [loading, setLoading] = useState(true)
-  const [lastUpdated, setLastUpdated] = useState('never')
-
-  // Run one full refresh of all services.
-  async function loadDashboard() {
-    setLoading(true)
-    const nextStatus = {}
-    const nextResults = {}
-
-    for (const service of serviceConfigs) {
-      try {
-        const health = await getServiceHealth(service.url)
-        nextStatus[service.key] = {
-          ...service,
-          status: health.status || 'healthy',
-          latency: 'live',
-          detail: health.service || service.name,
-        }
-
-        const prediction = await callPrediction(service)
-        nextResults[service.key] = {
-          ...service,
-          status: 'healthy',
-          detail: service.summary(prediction),
-          result: prediction,
-        }
-      } catch (error) {
-        nextStatus[service.key] = {
-          ...service,
-          status: 'offline',
-          latency: 'n/a',
-          detail: error.message,
-        }
-        nextResults[service.key] = {
-          ...service,
-          status: 'offline',
-          detail: 'Prediction unavailable',
-          result: null,
-        }
-      }
-    }
-
-    setServiceStatus(nextStatus)
-    setServiceResults(nextResults)
-    setLastUpdated(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }))
-    setLoading(false)
-  }
-
-  // Refresh the dashboard every 15 seconds.
-  useEffect(() => {
-    loadDashboard()
-    const intervalId = window.setInterval(() => {
-      loadDashboard()
-    }, 15000)
-
-    return () => window.clearInterval(intervalId)
-  }, [])
-
-  const healthyCount = Object.values(serviceStatus).filter((service) => service.status === 'healthy').length
-
-  // Cards used in the dashboard summary.
-  const metricCards = [
-    { label: 'Total requests', value: loading ? 'checking' : String(healthyCount * 200 + 120), change: healthyCount > 0 ? `${healthyCount}/3 services live` : 'no live services' },
-    { label: 'Avg latency', value: loading ? 'n/a' : '180ms', change: 'live prediction baseline' },
-    { label: 'Model accuracy', value: loading ? 'n/a' : '94.8%', change: 'validation check' },
-    { label: 'Alert volume', value: loading ? '0' : String(Math.max(0, 3 - healthyCount)), change: healthyCount === 3 ? 'clear' : 'monitoring' },
-  ]
-
-  return (
-    <div className="platform-shell">
-      <header className="topbar">
-        <div>
-          <p className="eyebrow">Assessment IV</p>
-          <h1>ML Platform Dashboard</h1>
-        </div>
-        <div className="topbar-actions">
-          <div className="topbar-meta">
-            <span className="muted">Last updated: {lastUpdated}</span>
-          </div>
-          <span className={`status-pill ${healthyCount === 3 ? 'status-pill--online' : 'status-pill--offline'}`}>
-            {loading ? 'Checking services' : healthyCount === 3 ? 'System online' : 'Partial outage'}
-          </span>
-          <button type="button" className="action-button" onClick={loadDashboard}>
-            Refresh
-          </button>
-        </div>
-      </header>
-
-      <main className="content">
-        <section className="hero-panel">
-          <div className="hero-copy">
-            <p className="eyebrow eyebrow--accent">Production overview</p>
-            <h2>Monitoring the platform core services in one place.</h2>
-            <p>
-              This dashboard connects to the live health and prediction endpoints for the
-              fraud, forecasting, and recommendation services to give a real operational view.
-            </p>
-          </div>
-          <div className="hero-summary">
-            <div>
-              <span>Deployment</span>
-              <strong>aws-us-east-1</strong>
-            </div>
-            <div>
-              <span>Environment</span>
-              <strong>dev</strong>
-            </div>
-            <div>
-              <span>Owner</span>
-              <strong>anthony</strong>
-            </div>
-          </div>
-        </section>
-
-        <section className="metrics-grid" aria-label="Platform metrics">
-          {metricCards.map((metric) => (
-            <article key={metric.label} className="metric-card">
-              <div className="metric-card__label">{metric.label}</div>
-              <div className="metric-card__value">{metric.value}</div>
-              <div className="metric-card__change">{metric.change}</div>
-            </article>
-          ))}
-        </section>
-
-        <section className="panel-grid">
-          <article className="panel">
-            <div className="panel-header">
-              <h3>Service health</h3>
-              <span className="muted">Live status</span>
-            </div>
-
-            <div className="service-list">
-              {serviceConfigs.map((service) => {
-                const current = serviceStatus[service.key] || { status: 'checking', latency: 'n/a', detail: 'Requesting health status...' }
-                const isHealthy = current.status === 'healthy'
-                const isOffline = current.status === 'offline'
-
-                return (
-                  <div key={service.key} className={`service-row ${isHealthy ? 'service-row--healthy' : ''} ${isOffline ? 'service-row--offline' : ''}`}>
-                    <div>
-                      <strong>{service.name}</strong>
-                      <span>{service.url}</span>
-                      {current.detail && <small>{current.detail}</small>}
-                    </div>
-                    <div className="service-meta">
-                      <span className={`status-pill ${isHealthy ? 'status-pill--online' : isOffline ? 'status-pill--offline' : 'status-pill--pending'}`}>
-                        {current.status}
-                      </span>
-                      <span className="latency">{current.latency}</span>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </article>
-
-          <article className="panel">
-            <div className="panel-header">
-              <h3>Model outputs</h3>
-              <span className="muted">Real predictions</span>
-            </div>
-
-            <div className="result-list">
-              {serviceConfigs.map((service) => {
-                const result = serviceResults[service.key]
-
-                return (
-                  <div key={service.key} className="result-card">
-                    <h4>{service.name}</h4>
-                    {result && result.result ? (
-                      <div className="result-block">
-                        {service.key === 'fraud' && (
-                          <>
-                            <span>Prediction: {result.result.prediction}</span>
-                            <strong>Risk score: {result.result.risk_score}</strong>
-                          </>
-                        )}
-                        {service.key === 'forecasting' && (
-                          <>
-                            <span>Periods: {result.result.periods}</span>
-                            <strong>Forecast: {result.result.forecast.join(', ')}</strong>
-                          </>
-                        )}
-                        {service.key === 'recommendations' && (
-                          <>
-                            <span>User: {result.result.user_id}</span>
-                            <strong>Top items: {result.result.recommendations.map((item) => `${item.item_id}:${item.score}`).join(', ')}</strong>
-                          </>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="result-block result-block--empty">
-                        <span>Prediction unavailable</span>
-                      </div>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
-          </article>
-        </section>
-
-        <section className="panel-grid panel-grid--bottom">
-          <article className="panel">
-            <div className="panel-header">
-              <h3>Deployment flow</h3>
-              <span className="muted">Next steps</span>
-            </div>
-
-            <ol className="pipeline-list">
-              {pipelineSteps.map((step, index) => (
-                <li key={step}>
-                  <span>{index + 1}</span>
-                  <p>{step}</p>
-                </li>
-              ))}
-            </ol>
-          </article>
-        </section>
-      </main>
+  // Builds labeled inputs and a submit button, then shows the actual response, elapsed time,
+  // provider, and request ID.
+  return <article className="panel">
+    <h2>{service.name}</h2>
+    <form onSubmit={submit}>
+      {Object.entries(fields).map(([key, value]) => <label key={key}>{key.replaceAll('_', ' ')}
+        <input required type={['category', 'values'].includes(key) ? 'text' : 'number'} step={key === 'amount' ? 'any' : '1'}
+          min={['user_id', 'limit', 'periods'].includes(key) ? 1 : 0} value={value}
+          onChange={e => setFields({...fields, [key]: e.target.value})}/>
+      </label>)}
+      {service.key === 'recommendations' && <p className="muted">Categories: books, electronics, fashion, home, sports.</p>}
+      <button className="action-button" disabled={busy}>{busy ? 'Predicting…' : 'Run prediction'}</button>
+    </form>
+    <div aria-live="polite">
+      {error && <p role="alert" className="result-block--empty">{error}</p>}
+      {result && <><p>Live response · {elapsed} ms · {result.body.provider} inference</p>
+        <pre>{JSON.stringify(result.body, null, 2)}</pre><small>Request: {result.requestId}</small></>}
     </div>
-  )
+  </article>
 }
-
-export default App
+// Displays API-supplied team, health, readiness, model/release versions, provider, endpoint, and
+// region. Missing data and errors stay visible.
+function ServiceStatus({service, status = {}}) {
+  const metadata = status.metadata?.body
+  return <article className="panel" aria-label={`${service.name} operations`}>
+    <h3>{service.name}</h3>
+    <p>Service: {metadata?.service || service.key}</p>
+    <p>Owning team: {metadata?.team || 'Unavailable'}</p>
+    {['health', 'ready'].map(kind => {
+      const check = status[kind]
+      // Renders the header, manual refresh button, service operations cards, and three independent
+      // prediction forms.
+      return <div key={kind} className="operation-status">
+        <strong>{kind === 'health' ? 'Health' : 'Readiness'}: </strong>
+        <span>{check?.state === 'error' ? 'Unavailable' : check?.body?.status || 'Checking…'}</span>
+        {check?.state === 'loading' && check.body && <small> Updating…</small>}
+        {check?.state === 'error' && <small role="alert"> {check.error}</small>}
+        {check?.checkedAt && <small> Last checked: {new Date(check.checkedAt).toLocaleTimeString()}</small>}
+      </div>
+    })}
+    <p>Model: {metadata?.model || 'Unavailable'} · Version: {metadata?.model_version || 'Unavailable'}</p>
+    <p>Service version: {metadata?.service_version || 'Unavailable'}</p>
+    <p>Inference: {metadata?.provider || 'Unavailable'}</p>
+    {metadata?.endpoint && <p className="endpoint">Endpoint: {metadata.endpoint} ({metadata.region || 'Region unavailable'})</p>}
+    {status.metadata?.state === 'loading' && <small>Loading metadata…</small>}
+    {status.metadata?.state === 'error' && <small role="alert">Metadata unavailable: {status.metadata.error}</small>}
+  </article>
+}
+// Stores each service/check separately and keeps a reference to the active poller.
+export default function App() {
+  const [status, setStatus] = useState({})
+  const poller = useRef(null)
+  // Starts independent background checks, merges each response immediately, and stops/aborts
+  // checks when the component unmounts.
+  useEffect(() => {
+    const instance = createPoller(services, request, (service, kind, check) => {
+      setStatus(previous => ({...previous, [service]: {...previous[service], [kind]:
+        check.state === 'loading' ? {...previous[service]?.[kind], ...check} : check}}))
+    })
+    poller.current = instance
+    return () => { instance.stop(); poller.current = null }
+  }, [])
+  return <div className="platform-shell">
+    <header className="topbar"><div><p className="eyebrow">Assessment IV</p><h1>ML Platform Operations</h1></div>
+      <button className="action-button" onClick={() => poller.current?.refresh()}>Refresh status</button></header>
+    <main className="content">
+      <section className="hero-panel"><div className="hero-copy">
+        <h2>Service operations</h2><p>Health, readiness, and model metadata come from the deployed APIs. Status checks refresh automatically every 15 seconds after each response.</p>
+        <p className="muted">Readiness validates configuration; a ready service can still encounter an inference runtime failure.</p>
+      </div></section>
+      <section className="prediction-grid" aria-label="Live service status" aria-live="polite">
+        {services.map(service => <ServiceStatus key={service.key} service={service} status={status[service.key]}/>)}</section>
+      <section><h2>Test model requests</h2><p>Enter data to execute a live prediction.</p>
+        <div className="prediction-grid">{services.map(service => <ModelForm key={service.key} service={service}/>)}</div></section>
+    </main>
+  </div>
+}

@@ -1,0 +1,53 @@
+# Defines this ResourceQuota in fraud-team.
+# Tells Kubernetes which resource type and schema to use.
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
+  name: workload-budget
+  namespace: fraud-team
+  labels:
+    owner: anthony
+    team: fraud-team
+    app.kubernetes.io/part-of: anthony-assessment4
+spec:
+  # Set the total resource and pod ceilings for this namespace.
+  hard:
+    requests.cpu: '2'
+    requests.memory: 2Gi
+    limits.cpu: '6'
+    limits.memory: 6Gi
+    pods: '16'
+---
+# Defines this LimitRange in fraud-team.
+# Tells Kubernetes which resource type and schema to use.
+apiVersion: v1
+kind: LimitRange
+metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
+  name: container-defaults
+  namespace: fraud-team
+  labels:
+    owner: anthony
+    team: fraud-team
+    app.kubernetes.io/part-of: anthony-assessment4
+spec:
+  # List per-container resource boundaries and defaults.
+  limits:
+  - type: Container
+    # Reject containers requesting less than these minimums.
+    min:
+      cpu: 10m
+      memory: 32Mi
+    # Reject containers exceeding these maximums.
+    max:
+      cpu: '1'
+      memory: 1Gi
+    # Supply scheduling requests when a container omits them.
+    defaultRequest:
+      cpu: 100m
+      memory: 128Mi
+    # Supply container resource limits when they are omitted.
+    default:
+      cpu: 500m
+      memory: 512Mi

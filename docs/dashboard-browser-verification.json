@@ -1,0 +1,55 @@
+{
+  "verified_at": "2026-10-06T23:09:10.449Z",
+  "metadata": {
+    "fraud": {
+      "service": "fraud",
+      "team": "fraud-team",
+      "model": "fraud-model-v1",
+      "model_version": "v1",
+      "service_version": "dashboard-ops-20261006-v1",
+      "provider": "sagemaker",
+      "endpoint": "anthony-assessment4-fraud-sagemaker",
+      "region": "us-east-1"
+    },
+    "forecasting": {
+      "service": "forecasting",
+      "team": "forecasting-team",
+      "model": "forecasting-model-v1",
+      "model_version": "v1",
+      "service_version": "dashboard-ops-20261006-v1",
+      "provider": "sagemaker",
+      "endpoint": "anthony-assessment4-forecasting-sagemaker",
+      "region": "us-east-1"
+    },
+    "recommendations": {
+      "service": "recommendations",
+      "team": "recommendations-team",
+      "model": "recommendations-model-v1",
+      "model_version": "v1",
+      "service_version": "dashboard-ops-20261006-v1",
+      "provider": "sagemaker",
+      "endpoint": "anthony-assessment4-recommendations-sagemaker",
+      "region": "us-east-1"
+    }
+  },
+  "poll_counts": {
+    "fraud/ready": 4,
+    "fraud/health": 4,
+    "recommendations/health": 4,
+    "recommendations/ready": 4,
+    "forecasting/ready": 4,
+    "fraud/metadata": 4,
+    "forecasting/health": 4,
+    "forecasting/metadata": 4,
+    "recommendations/metadata": 4
+  },
+  "partial_failure_isolated": true,
+  "live_prediction_during_partial_failure": {
+    "model": "fraud-model-v1",
+    "provider": "sagemaker",
+    "prediction": "fraud",
+    "risk_score": 0.7604
+  },
+  "recovery_verified": true,
+  "release": "dashboard-ops-20261006-v1"
+}

@@ -1,13 +1,23 @@
+# Defines this Service in recommendations-team.
+# Tells Kubernetes which resource type and schema to use.
 apiVersion: v1
 kind: Service
 metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
   name: recommendations-service
-  namespace: fraud-team
+  namespace: recommendations-team
+  labels:
+    app.kubernetes.io/part-of: anthony-assessment4
+    owner: anthony
+    team: recommendations-team
 spec:
+  # Sends traffic only to pods matching this application’s labels.
   selector:
     app: recommendations-service
+  # Maps the Service port to the target container port.
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 8000
+  - protocol: TCP
+    port: 80
+    targetPort: 8000
+  # Uses an internal stable ClusterIP address.
   type: ClusterIP

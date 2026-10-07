@@ -1,107 +1,41 @@
 #!/usr/bin/env bash
+# Stops if a required command fails.
 set -euo pipefail
-
-usage() {
-  cat <<'EOF'
-Usage: deploy.sh [--tag TAG] [--region REGION] [--namespace NAMESPACE]
-
-Applies Kubernetes manifests and updates the running deployments to the selected image tag.
-
-Examples:
-  ./scripts/deploy.sh
-  ./scripts/deploy.sh --tag v1
-  AWS_REGION=us-east-1 ./scripts/deploy.sh --tag latest
-EOF
-}
-
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-cd "$ROOT_DIR"
-
-IMAGE_TAG="${IMAGE_TAG:-latest}"
-AWS_REGION="${AWS_REGION:-us-east-1}"
-NAMESPACE="${NAMESPACE:-fraud-team}"
-
-while [[ $# -gt 0 ]]; do
-  case "$1" in
-    --tag)
-      IMAGE_TAG="$2"
-      shift 2
-      ;;
-    --region)
-      AWS_REGION="$2"
-      shift 2
-      ;;
-    --namespace)
-      NAMESPACE="$2"
-      shift 2
-      ;;
-    -h|--help)
-      usage
-      exit 0
-      ;;
-    *)
-      echo "Unknown argument: $1" >&2
-      usage >&2
-      exit 1
-      ;;
+cd "$(dirname "$0")/.."
+# Selects release tag, AWS account/region, existing cluster, and Python executable.
+export IMAGE_TAG="${IMAGE_TAG:?Set IMAGE_TAG to the tag built by build.sh}"
+export AWS_REGION="${AWS_REGION:-us-east-1}"
+export AWS_ACCOUNT_ID="${AWS_ACCOUNT_ID:-$(aws sts get-caller-identity --query Account --output text)}"
+EKS_CLUSTER_NAME="${EKS_CLUSTER_NAME:-anthony-assessment4-eks}"
+PYTHON="${PYTHON:-.venv/bin/python}"
+# Tests must pass before changing workloads.
+# Requires Python tests to pass before workload changes.
+"$PYTHON" -m pytest -q apps tests
+# Renders release manifests and cleans up its own temporary file on exit.
+manifest=$(mktemp)
+trap 'rm -f "$manifest"' EXIT
+"$PYTHON" scripts/render_manifests.py > "$manifest"
+# Points kubectl at the existing cluster.
+aws eks update-kubeconfig --region "$AWS_REGION" --name "$EKS_CLUSTER_NAME"
+# Checks the manifests locally.
+kubectl apply --dry-run=client -f "$manifest" >/dev/null
+# Namespaces must exist before admission can validate namespaced resources.
+# Validates on the live API server, creates namespace prerequisites, applies budgets, then checks
+# admission again.
+kubectl apply --dry-run=server -f k8s/namespaces >/dev/null
+kubectl apply -f k8s/namespaces
+kubectl apply --dry-run=server -f "$manifest" >/dev/null
+# Enforce namespace budgets before creating or updating workloads.
+kubectl apply -f k8s/policies
+kubectl apply --dry-run=server -f "$manifest" >/dev/null
+# Applies the validated resources; this does not rebuild EKS or ECR.
+kubectl apply -f "$manifest"
+# Waits for each Deployment in its correct namespace before declaring the release complete.
+for service in fraud forecasting recommendations gateway frontend; do
+  case "$service" in
+    fraud|forecasting|recommendations) namespace="${service}-team" ;;
+    gateway|frontend) namespace=platform-team ;;
   esac
+  kubectl -n "$namespace" rollout status "deployment/${service}-service" --timeout=180s
 done
-
-if ! command -v aws >/dev/null 2>&1; then
-  echo "AWS CLI is required but not installed." >&2
-  exit 1
-fi
-
-if ! command -v kubectl >/dev/null 2>&1; then
-  echo "kubectl is required but not installed." >&2
-  exit 1
-fi
-
-AWS_ACCOUNT_ID="${AWS_ACCOUNT_ID:-$(aws sts get-caller-identity --query Account --output text --region "$AWS_REGION" 2>/dev/null || true)}"
-if [[ -z "$AWS_ACCOUNT_ID" ]]; then
-  echo "Unable to determine AWS account ID. Ensure you are authenticated with AWS CLI." >&2
-  exit 1
-fi
-
-EKS_CLUSTER_NAME="${EKS_CLUSTER_NAME:-${OWNER:-anthony}-${PROJECT_NAME:-assessment4}-eks}"
-aws eks update-kubeconfig --region "$AWS_REGION" --name "$EKS_CLUSTER_NAME" >/dev/null
-
-kubectl apply -f k8s/namespaces/fraud-team.yaml
-kubectl apply -f k8s/configmaps/
-kubectl apply -f k8s/secrets/
-kubectl apply -f k8s/deployments/
-kubectl apply -f k8s/services/
-kubectl apply -f k8s/ingress/ingress.yaml
-
-for SERVICE in fraud forecasting recommendations; do
-  case "$SERVICE" in
-    fraud)
-      REPO_NAME="${OWNER:-anthony}-${PROJECT_NAME:-assessment4}-fraud"
-      DEPLOYMENT_NAME="fraud-service"
-      CONTAINER_NAME="fraud-service"
-      ;;
-    forecasting)
-      REPO_NAME="${OWNER:-anthony}-${PROJECT_NAME:-assessment4}-forecasting"
-      DEPLOYMENT_NAME="forecasting-service"
-      CONTAINER_NAME="forecasting"
-      ;;
-    recommendations)
-      REPO_NAME="${OWNER:-anthony}-${PROJECT_NAME:-assessment4}-recommendations"
-      DEPLOYMENT_NAME="recommendations-service"
-      CONTAINER_NAME="recommendations-service"
-      ;;
-    *)
-      echo "Unsupported service: $SERVICE" >&2
-      exit 1
-      ;;
-  esac
-
-  IMAGE_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPO_NAME}:${IMAGE_TAG}"
-
-  echo "Updating ${DEPLOYMENT_NAME} with image ${IMAGE_URI}"
-  kubectl -n "$NAMESPACE" set image deployment/${DEPLOYMENT_NAME} ${CONTAINER_NAME}="${IMAGE_URI}"
-  kubectl -n "$NAMESPACE" rollout status deployment/${DEPLOYMENT_NAME} --timeout=180s
-
-done
-
-echo "Deployment completed successfully."
+kubectl -n platform-team get ingress

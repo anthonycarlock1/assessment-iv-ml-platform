@@ -1,0 +1,10 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "sagemaker:InvokeEndpoint",
+      "Resource": "arn:aws:sagemaker:us-east-1:388691194728:endpoint/anthony-assessment4-fraud-sagemaker"
+    }
+  ]
+}

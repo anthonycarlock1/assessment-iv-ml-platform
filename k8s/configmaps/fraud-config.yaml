@@ -1,10 +1,31 @@
+# Defines this ConfigMap in fraud-team.
+# Tells Kubernetes which resource type and schema to use.
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
   name: fraud-config
   namespace: fraud-team
+  labels:
+    app.kubernetes.io/part-of: anthony-assessment4
+    owner: anthony
+    team: fraud-team
 data:
-  SERVICE_NAME: "fraud-detection"
-  MODEL_NAME: "fraud-local-placeholder-v1"
-  AWS_REGION: "us-east-1"
-  LOG_LEVEL: "INFO"
+  # Supplies a non-secret application setting.
+  SERVICE_NAME: fraud
+  # Selects SageMaker invocation for the deployed adapter.
+  MODEL_PROVIDER: sagemaker
+  # Supplies a non-secret application setting.
+  MODEL_PATH: /app/ml/models/fraud_model.joblib
+  # Chooses the AWS region.
+  AWS_REGION: us-east-1
+  # Names this service’s SageMaker endpoint.
+  FRAUD_SAGEMAKER_ENDPOINT: anthony-assessment4-fraud-sagemaker
+  # Identifies the owning team in logs and dashboard metadata.
+  TEAM_NAME: fraud-team
+  # Identifies the configured model for the dashboard.
+  MODEL_NAME: fraud-model-v1
+  # Identifies the model release.
+  MODEL_VERSION: v1
+  # Identifies the application release; rendering overwrites it with the requested image tag.
+  SERVICE_VERSION: dashboard-ops-20261006-v1

@@ -4,6 +4,7 @@ set -euo pipefail
 AWS_REGION="${AWS_REGION:-us-east-1}"
 OWNER="${OWNER:-anthony}"
 
+# Targets the three owner-prefixed repositories.
 repos=(
   "${OWNER}-assessment4-forecasting"
   "${OWNER}-assessment4-fraud"
@@ -12,6 +13,7 @@ repos=(
 
 for repo in "${repos[@]}"; do
   echo "Checking repository: $repo"
+  # Lists all image IDs and skips an empty repository.
   image_ids=$(aws ecr list-images \
     --region "$AWS_REGION" \
     --repository-name "$repo" \
@@ -24,6 +26,7 @@ for repo in "${repos[@]}"; do
   fi
 
   echo "Deleting images in $repo..."
+  # Deletes the listed images, including potentially deployed releases; stops on deletion failure.
   aws ecr batch-delete-image \
     --region "$AWS_REGION" \
     --repository-name "$repo" \

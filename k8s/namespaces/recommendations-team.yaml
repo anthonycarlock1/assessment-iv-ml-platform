@@ -1,0 +1,11 @@
+# Defines this Namespace in recommendations-team.
+# Tells Kubernetes which resource type and schema to use.
+apiVersion: v1
+kind: Namespace
+metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
+  name: recommendations-team
+  labels:
+    owner: anthony
+    team: recommendations-team
+    app.kubernetes.io/part-of: anthony-assessment4

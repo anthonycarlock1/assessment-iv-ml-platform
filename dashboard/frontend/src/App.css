@@ -1,3 +1,4 @@
+/* Styles form inputs, labels, buttons, and disabled/busy controls. */
 .platform-shell {
   width: min(1200px, calc(100vw - 48px));
   margin: 32px auto;
@@ -17,10 +18,12 @@
 .topbar-actions,
 .hero-summary,
 .metric-card__change,
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .service-meta {
   display: flex;
 }
 
+/* Sets spacing, panel appearance, and the arrangement of this layout block. */
 .topbar {
   align-items: center;
   justify-content: space-between;
@@ -28,22 +31,26 @@
   margin-bottom: 28px;
 }
 
+/* Sets spacing, panel appearance, and the arrangement of this layout block. */
 .topbar h1 {
   margin: 6px 0 0;
   font-size: clamp(2rem, 4vw, 3rem);
   letter-spacing: -0.06em;
 }
 
+/* Sets spacing, panel appearance, and the arrangement of this layout block. */
 .topbar-actions {
   align-items: center;
   gap: 12px;
 }
 
+/* Sets spacing, panel appearance, and the arrangement of this layout block. */
 .topbar-meta {
   display: flex;
   align-items: center;
 }
 
+/* Sets spacing, panel appearance, and the arrangement of this layout block. */
 .eyebrow {
   margin: 0;
   text-transform: uppercase;
@@ -52,10 +59,12 @@
   color: #94a3b8;
 }
 
+/* Sets spacing, panel appearance, and the arrangement of this layout block. */
 .eyebrow--accent {
   color: #7dd3fc;
 }
 
+/* Styles form inputs, labels, buttons, and disabled/busy controls. */
 .action-button {
   border: 1px solid rgba(148, 163, 184, 0.25);
   background: rgba(15, 23, 42, 0.7);
@@ -67,17 +76,20 @@
   transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
+/* Styles form inputs, labels, buttons, and disabled/busy controls. */
 .action-button:hover {
   transform: translateY(-1px);
   border-color: rgba(125, 211, 252, 0.8);
 }
 
+/* Sets spacing, panel appearance, and the arrangement of this layout block. */
 .content {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
+/* Sets spacing, panel appearance, and the arrangement of this layout block. */
 .hero-panel {
   justify-content: space-between;
   gap: 20px;
@@ -87,22 +99,26 @@
   background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9));
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .hero-copy {
   flex: 1.6;
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .hero-copy h2 {
   margin: 12px 0;
   font-size: clamp(1.8rem, 3vw, 2.6rem);
   line-height: 1.1;
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .hero-copy p {
   color: #cbd5e1;
   font-size: 1.02rem;
   max-width: 62ch;
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .hero-summary {
   flex: 1;
   flex-direction: column;
@@ -113,12 +129,14 @@
   border: 1px solid rgba(45, 212, 191, 0.15);
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .hero-summary div {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .hero-summary span {
   color: #94a3b8;
   font-size: 0.75rem;
@@ -126,17 +144,20 @@
   text-transform: uppercase;
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .hero-summary strong {
   color: #f8fafc;
   font-size: 1.2rem;
 }
 
+/* Sets spacing, panel appearance, and the arrangement of this layout block. */
 .metrics-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .metric-card {
   flex-direction: column;
   gap: 10px;
@@ -146,6 +167,7 @@
   background: rgba(15, 23, 42, 0.82);
 }
 
+/* Styles form inputs, labels, buttons, and disabled/busy controls. */
 .metric-card__label {
   color: #94a3b8;
   font-size: 0.8rem;
@@ -153,6 +175,7 @@
   text-transform: uppercase;
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .metric-card__value {
   font-size: clamp(1.8rem, 2vw, 2.5rem);
   font-weight: 700;
@@ -160,6 +183,7 @@
   color: #f8fafc;
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .metric-card__change {
   display: inline-flex;
   align-items: center;
@@ -167,16 +191,19 @@
   color: #86efac;
 }
 
+/* Sets spacing, panel appearance, and the arrangement of this layout block. */
 .panel-grid {
   display: grid;
   grid-template-columns: 1.3fr 0.9fr;
   gap: 18px;
 }
 
+/* Sets spacing, panel appearance, and the arrangement of this layout block. */
 .panel-grid--bottom {
   grid-template-columns: 1fr;
 }
 
+/* Sets spacing, panel appearance, and the arrangement of this layout block. */
 .panel {
   padding: 22px;
   border: 1px solid rgba(148, 163, 184, 0.15);
@@ -184,28 +211,33 @@
   background: rgba(15, 23, 42, 0.82);
 }
 
+/* Sets spacing, panel appearance, and the arrangement of this layout block. */
 .panel-header {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
 }
 
+/* Sets spacing, panel appearance, and the arrangement of this layout block. */
 .panel-header h3 {
   margin: 0;
   font-size: 1.2rem;
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .muted {
   color: #94a3b8;
   font-size: 0.78rem;
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .service-list {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
+/* Sets spacing, panel appearance, and the arrangement of this layout block. */
 .service-row {
   justify-content: space-between;
   align-items: center;
@@ -216,27 +248,32 @@
   background: rgba(15, 118, 110, 0.05);
 }
 
+/* Sets spacing, panel appearance, and the arrangement of this layout block. */
 .service-row--healthy {
   border-color: rgba(34, 197, 94, 0.2);
   background: rgba(34, 197, 94, 0.06);
 }
 
+/* Styles status text/badges so availability and errors are readable. */
 .service-row--offline {
   border-color: rgba(239, 68, 68, 0.25);
   background: rgba(239, 68, 68, 0.04);
 }
 
+/* Sets spacing, panel appearance, and the arrangement of this layout block. */
 .service-row strong {
   display: block;
   color: #f8fafc;
   margin-bottom: 4px;
 }
 
+/* Sets spacing, panel appearance, and the arrangement of this layout block. */
 .service-row span {
   color: #94a3b8;
   font-size: 0.8rem;
 }
 
+/* Sets spacing, panel appearance, and the arrangement of this layout block. */
 .service-row small {
   display: block;
   margin-top: 6px;
@@ -244,11 +281,13 @@
   font-size: 0.72rem;
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .service-meta {
   align-items: center;
   gap: 12px;
 }
 
+/* Styles status text/badges so availability and errors are readable. */
 .status-pill {
   display: inline-flex;
   align-items: center;
@@ -261,36 +300,42 @@
   border: 1px solid transparent;
 }
 
+/* Styles status text/badges so availability and errors are readable. */
 .status-pill--online {
   color: #bbf7d0;
   background: rgba(34, 197, 94, 0.12);
   border-color: rgba(34, 197, 94, 0.2);
 }
 
+/* Styles status text/badges so availability and errors are readable. */
 .status-pill--offline {
   color: #fecaca;
   background: rgba(239, 68, 68, 0.12);
   border-color: rgba(239, 68, 68, 0.2);
 }
 
+/* Styles status text/badges so availability and errors are readable. */
 .status-pill--pending {
   color: #fde68a;
   background: rgba(250, 204, 21, 0.12);
   border-color: rgba(250, 204, 21, 0.2);
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .latency {
   color: #e2e8f0;
   font-weight: 600;
   font-size: 0.82rem;
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .result-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .result-card {
   padding: 16px;
   border-radius: 14px;
@@ -298,11 +343,13 @@
   background: rgba(15, 23, 42, 0.62);
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .result-card h4 {
   margin: 0 0 10px;
   color: #f8fafc;
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .result-block {
   display: flex;
   flex-direction: column;
@@ -311,14 +358,17 @@
   font-size: 0.9rem;
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .result-block strong {
   color: #f8fafc;
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .result-block--empty {
   color: #fca5a5;
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .pipeline-list {
   list-style: none;
   padding: 0;
@@ -328,6 +378,7 @@
   gap: 16px;
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .pipeline-list li {
   display: grid;
   grid-template-columns: 30px 1fr;
@@ -335,6 +386,7 @@
   align-items: start;
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .pipeline-list li span {
   width: 30px;
   height: 30px;
@@ -347,12 +399,14 @@
   font-weight: 700;
 }
 
+/* Sets typography, color, spacing, or appearance for this named UI element. */
 .pipeline-list p {
   margin: 0;
   color: #dbeafe;
   line-height: 1.5;
 }
 
+/* Adjusts columns and stacking for smaller screens. */
 @media (max-width: 900px) {
   .metrics-grid,
   .panel-grid {
@@ -364,6 +418,7 @@
   }
 }
 
+/* Adjusts columns and stacking for smaller screens. */
 @media (max-width: 640px) {
   .platform-shell {
     width: min(100vw - 20px, 1200px);
@@ -384,3 +439,23 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Wraps long response or endpoint text to keep it readable. */
+.prediction-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+/* Styles form inputs, labels, buttons, and disabled/busy controls. */
+form {display:flex;flex-direction:column;gap:14px}
+/* Styles form inputs, labels, buttons, and disabled/busy controls. */
+label {display:flex;flex-direction:column;gap:6px;text-transform:capitalize}
+/* Styles form inputs, labels, buttons, and disabled/busy controls. */
+input {padding:10px;border:1px solid #64748b;border-radius:8px;background:#0f172a;color:#f8fafc;font:inherit}
+/* Wraps long response or endpoint text to keep it readable. */
+pre {white-space:pre-wrap;overflow-wrap:anywhere;font-size:0.85rem}
+/* Styles form inputs, labels, buttons, and disabled/busy controls. */
+button:disabled {opacity:0.6;cursor:wait}
+
+/* Styles status text/badges so availability and errors are readable. */
+.operation-status {margin: 12px 0}
+/* Styles status text/badges so availability and errors are readable. */
+.operation-status small {display:block;color:#cbd5e1}
+/* Wraps long response or endpoint text to keep it readable. */
+.endpoint {overflow-wrap:anywhere}

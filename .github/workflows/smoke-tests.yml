@@ -1,41 +1,36 @@
 name: Smoke Tests
 
+# Defines the branches/events that start this workflow.
 on:
   push:
     branches: [ main ]
   pull_request:
 
+# Lists the runner jobs and their steps.
 jobs:
   smoke-tests:
     runs-on: ubuntu-latest
     steps:
+      # Downloads the repository into the runner.
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Installs the required Python interpreter.
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
+      # Reuses downloaded Python packages between runner jobs.
       - name: Cache pip
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
 
+      # Installs the project libraries.
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r apps/services/forecasting/requirements.txt || true
-          pip install -r apps/services/fraud/requirements.txt || true
-          pip install -r apps/services/recommendations/requirements.txt || true
-          pip install pytest
-
-      - name: Run forecasting smoke tests
-        run: python -m pytest -q apps/services/forecasting/test_main.py
-
-      - name: Run fraud smoke tests
-        run: python -m pytest -q apps/services/fraud/test_main.py
-
-      - name: Run recommendations smoke tests
-        run: python -m pytest -q apps/services/recommendations/test_main.py
+        run: python -m pip install -r requirements.txt
+      # Runs the Python suite, including routing and inference checks.
+      - name: Run integration tests
+        run: python -m pytest -q apps tests

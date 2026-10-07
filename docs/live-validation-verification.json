@@ -1,0 +1,82 @@
+{
+  "checks": [
+    {
+      "url": "http://frontend-service.platform-team.svc.cluster.local/api/fraud/predict",
+      "status": 422,
+      "response": {
+        "detail": "JSON numbers must be finite"
+      }
+    },
+    {
+      "url": "http://fraud-service.fraud-team.svc.cluster.local/predict",
+      "status": 422,
+      "response": {
+        "detail": [
+          {
+            "loc": [
+              "body",
+              "amount"
+            ],
+            "msg": "Input should be a finite number",
+            "type": "finite_number"
+          }
+        ]
+      }
+    },
+    {
+      "url": "http://frontend-service.platform-team.svc.cluster.local/api/forecasting/predict",
+      "status": 422,
+      "response": {
+        "detail": "JSON numbers must be finite"
+      }
+    },
+    {
+      "url": "http://forecasting-service.forecasting-team.svc.cluster.local/predict",
+      "status": 422,
+      "response": {
+        "detail": [
+          {
+            "loc": [
+              "body",
+              "values",
+              0
+            ],
+            "msg": "Input should be a finite number",
+            "type": "finite_number"
+          }
+        ]
+      }
+    },
+    {
+      "url": "http://frontend-service.platform-team.svc.cluster.local/api/recommendations/predict",
+      "status": 422,
+      "response": {
+        "detail": "JSON numbers must be finite"
+      }
+    },
+    {
+      "url": "http://recommendations-service.recommendations-team.svc.cluster.local/predict",
+      "status": 422,
+      "response": {
+        "detail": [
+          {
+            "loc": [
+              "body",
+              "user_id"
+            ],
+            "msg": "Input should be a finite number",
+            "type": "finite_number"
+          }
+        ]
+      }
+    },
+    {
+      "url": "http://frontend-service.platform-team.svc.cluster.local/api/recommendations/predict",
+      "status": 422,
+      "response": {
+        "detail": "Inference input rejected; check request values"
+      }
+    }
+  ],
+  "release": "namespace-integration-20261005-v3"
+}

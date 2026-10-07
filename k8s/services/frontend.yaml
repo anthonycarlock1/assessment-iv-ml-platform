@@ -1,0 +1,20 @@
+# Defines this Service in platform-team.
+# Tells Kubernetes which resource type and schema to use.
+apiVersion: v1
+kind: Service
+metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
+  name: frontend-service
+  namespace: platform-team
+  labels:
+    app.kubernetes.io/part-of: anthony-assessment4
+    owner: anthony
+    team: platform-team
+spec:
+  # Sends traffic only to pods matching this application’s labels.
+  selector:
+    app: frontend-service
+  # Maps the Service port to the target container port.
+  ports:
+  - port: 80
+    targetPort: 80

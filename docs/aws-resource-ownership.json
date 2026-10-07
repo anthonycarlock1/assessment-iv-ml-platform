@@ -1,0 +1,149 @@
+[
+  {
+    "type": "endpoint",
+    "name": "anthony-assessment4-fraud-sagemaker",
+    "arn": "arn:aws:sagemaker:us-east-1:388691194728:endpoint/anthony-assessment4-fraud-sagemaker",
+    "owner": "anthony",
+    "project": "anthony-assessment4"
+  },
+  {
+    "type": "endpoint-config",
+    "name": "anthony-assessment4-fraud-sm-v1",
+    "arn": "arn:aws:sagemaker:us-east-1:388691194728:endpoint-config/anthony-assessment4-fraud-sm-v1",
+    "owner": "anthony",
+    "project": "anthony-assessment4"
+  },
+  {
+    "type": "model",
+    "name": "anthony-assessment4-fraud-sm-v1",
+    "arn": "arn:aws:sagemaker:us-east-1:388691194728:model/anthony-assessment4-fraud-sm-v1",
+    "owner": "anthony",
+    "project": "anthony-assessment4"
+  },
+  {
+    "type": "endpoint",
+    "name": "anthony-assessment4-forecasting-sagemaker",
+    "arn": "arn:aws:sagemaker:us-east-1:388691194728:endpoint/anthony-assessment4-forecasting-sagemaker",
+    "owner": "anthony",
+    "project": "anthony-assessment4"
+  },
+  {
+    "type": "endpoint-config",
+    "name": "anthony-assessment4-forecasting-sm-v1",
+    "arn": "arn:aws:sagemaker:us-east-1:388691194728:endpoint-config/anthony-assessment4-forecasting-sm-v1",
+    "owner": "anthony",
+    "project": "anthony-assessment4"
+  },
+  {
+    "type": "model",
+    "name": "anthony-assessment4-forecasting-sm-v1",
+    "arn": "arn:aws:sagemaker:us-east-1:388691194728:model/anthony-assessment4-forecasting-sm-v1",
+    "owner": "anthony",
+    "project": "anthony-assessment4"
+  },
+  {
+    "type": "endpoint",
+    "name": "anthony-assessment4-recommendations-sagemaker",
+    "arn": "arn:aws:sagemaker:us-east-1:388691194728:endpoint/anthony-assessment4-recommendations-sagemaker",
+    "owner": "anthony",
+    "project": "anthony-assessment4"
+  },
+  {
+    "type": "endpoint-config",
+    "name": "anthony-assessment4-recommendations-sm-v1",
+    "arn": "arn:aws:sagemaker:us-east-1:388691194728:endpoint-config/anthony-assessment4-recommendations-sm-v1",
+    "owner": "anthony",
+    "project": "anthony-assessment4"
+  },
+  {
+    "type": "model",
+    "name": "anthony-assessment4-recommendations-sm-v1",
+    "arn": "arn:aws:sagemaker:us-east-1:388691194728:model/anthony-assessment4-recommendations-sm-v1",
+    "owner": "anthony",
+    "project": "anthony-assessment4"
+  },
+  {
+    "type": "role",
+    "name": "anthony-assessment4-sagemaker-execution",
+    "arn": "arn:aws:iam::388691194728:role/anthony-assessment4-sagemaker-execution",
+    "owner": "anthony",
+    "project": "anthony-assessment4"
+  },
+  {
+    "type": "role",
+    "name": "anthony-assessment4-fraud-invoke",
+    "arn": "arn:aws:iam::388691194728:role/anthony-assessment4-fraud-invoke",
+    "owner": "anthony",
+    "project": "anthony-assessment4"
+  },
+  {
+    "type": "role",
+    "name": "anthony-assessment4-forecasting-invoke-v2",
+    "arn": "arn:aws:iam::388691194728:role/anthony-assessment4-forecasting-invoke-v2",
+    "owner": "anthony",
+    "project": "anthony-assessment4"
+  },
+  {
+    "type": "role",
+    "name": "anthony-assessment4-recommendations-invoke-v2",
+    "arn": "arn:aws:iam::388691194728:role/anthony-assessment4-recommendations-invoke-v2",
+    "owner": "anthony",
+    "project": "anthony-assessment4"
+  },
+  {
+    "type": "role",
+    "name": "anthony-assessment4-forecasting-invoke",
+    "arn": "arn:aws:iam::388691194728:role/anthony-assessment4-forecasting-invoke",
+    "owner": "anthony",
+    "project": "anthony-assessment4"
+  },
+  {
+    "type": "role",
+    "name": "anthony-assessment4-recommendations-invoke",
+    "arn": "arn:aws:iam::388691194728:role/anthony-assessment4-recommendations-invoke",
+    "owner": "anthony",
+    "project": "anthony-assessment4"
+  },
+  {
+    "type": "eks-addon",
+    "name": "eks-pod-identity-agent",
+    "arn": "arn:aws:eks:us-east-1:388691194728:addon/anthony-assessment4-eks/eks-pod-identity-agent/0ad0848a-4bba-07fe-3c1a-146c3262c900",
+    "owner": "anthony",
+    "project": "anthony-assessment4"
+  },
+  {
+    "type": "pod-identity",
+    "name": "fraud-team/fraud-sagemaker",
+    "arn": "arn:aws:eks:us-east-1:388691194728:podidentityassociation/anthony-assessment4-eks/a-61fmul2hrjjmf5p6s",
+    "owner": "anthony",
+    "project": "anthony-assessment4"
+  },
+  {
+    "type": "pod-identity",
+    "name": "forecasting-team/forecasting-sagemaker",
+    "arn": "arn:aws:eks:us-east-1:388691194728:podidentityassociation/anthony-assessment4-eks/a-n1fmzttifus1ibmoc",
+    "owner": "anthony",
+    "project": "anthony-assessment4"
+  },
+  {
+    "type": "pod-identity",
+    "name": "fraud-team/forecasting-sagemaker",
+    "arn": "arn:aws:eks:us-east-1:388691194728:podidentityassociation/anthony-assessment4-eks/a-hwf1cp1okryzco7vs",
+    "owner": "anthony",
+    "project": "anthony-assessment4"
+  },
+  {
+    "type": "pod-identity",
+    "name": "fraud-team/recommendations-sagemaker",
+    "arn": "arn:aws:eks:us-east-1:388691194728:podidentityassociation/anthony-assessment4-eks/a-jxajpp7judejv0szr",
+    "owner": "anthony",
+    "project": "anthony-assessment4"
+  },
+  {
+    "type": "pod-identity",
+    "name": "recommendations-team/recommendations-sagemaker",
+    "arn": "arn:aws:eks:us-east-1:388691194728:podidentityassociation/anthony-assessment4-eks/a-no6bqvw75nqcebwy9",
+    "owner": "anthony",
+    "project": "anthony-assessment4"
+  }
+]

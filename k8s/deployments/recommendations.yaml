@@ -1,49 +1,74 @@
+# Defines this Deployment in recommendations-team.
+# Tells Kubernetes which resource type and schema to use.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
   name: recommendations-service
-  namespace: fraud-team
+  namespace: recommendations-team
+  labels:
+    app.kubernetes.io/part-of: anthony-assessment4
+    owner: anthony
+    team: recommendations-team
 spec:
+  # Keeps 2 pod(s) available for this workload.
   replicas: 2
+  # Matches this Deployment to its own pod labels.
   selector:
     matchLabels:
       app: recommendations-service
+  # Defines what each new pod will run.
   template:
     metadata:
       labels:
         app: recommendations-service
+        team: recommendations-team
+        owner: anthony
     spec:
       containers:
-        - name: recommendations-service
-          image: 388691194728.dkr.ecr.us-east-1.amazonaws.com/anthony-assessment4-recommendations:v1
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 8000
-          envFrom:
-            - configMapRef:
-                name: recommendations-config
-          readinessProbe:
-            httpGet:
-              path: /ready
-              port: 8000
-            initialDelaySeconds: 5
-            periodSeconds: 10
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 8000
-            initialDelaySeconds: 10
-            periodSeconds: 20
-          startupProbe:
-            httpGet:
-              path: /health
-              port: 8000
-            failureThreshold: 30
-            periodSeconds: 5
-          resources:
-            requests:
-              cpu: "100m"
-              memory: "128Mi"
-            limits:
-              cpu: "500m"
-              memory: "512Mi"
+      - name: recommendations-service
+        # Chooses the built release from the existing ECR repository.
+        image: 388691194728.dkr.ecr.us-east-1.amazonaws.com/anthony-assessment4-recommendations:dashboard-ops-20261006-v1
+        imagePullPolicy: Always
+        # Documents the port served inside the container.
+        ports:
+        - containerPort: 8000
+        # Loads the matching ConfigMap into environment variables.
+        envFrom:
+        - configMapRef:
+            name: recommendations-config
+        # Calls /ready; unready pods stop receiving Service traffic.
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 2
+        # Calls /health and restarts a stuck process after repeated failure.
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 20
+          timeoutSeconds: 2
+        # Allows initialization before regular health checks can cause restarts.
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          failureThreshold: 30
+          periodSeconds: 5
+          timeoutSeconds: 2
+        # Requests reserve scheduling capacity; limits cap use.
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          # Cap CPU and memory usage for this container.
+          limits:
+            cpu: 500m
+            memory: 512Mi
+      # Selects the ServiceAccount linked to a scoped Pod Identity role.
+      serviceAccountName: recommendations-sagemaker

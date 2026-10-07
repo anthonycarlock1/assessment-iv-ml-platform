@@ -1,3 +1,5 @@
+# Exclude generated files and local dependencies from source tracking or the container build
+# context.
 venv
 .venv
 __pycache__

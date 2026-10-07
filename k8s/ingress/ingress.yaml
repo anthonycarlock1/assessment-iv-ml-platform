@@ -1,33 +1,55 @@
+# Defines this Ingress in platform-team.
+# Tells Kubernetes which resource type and schema to use.
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
   name: assessment4-ingress
-  namespace: fraud-team
+  namespace: platform-team
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-read-timeout: '85'
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  labels:
+    app.kubernetes.io/part-of: anthony-assessment4
+    owner: anthony
+    team: platform-team
 spec:
   ingressClassName: nginx
+  # Choose URL paths and destination Services for ingress traffic.
   rules:
-    - http:
-        paths:
-          - path: /fraud
-            pathType: Prefix
-            backend:
-              service:
-                name: fraud-service
-                port:
-                  number: 80
-          - path: /forecasting
-            pathType: Prefix
-            backend:
-              service:
-                name: forecasting-service
-                port:
-                  number: 80
-          - path: /recommendations
-            pathType: Prefix
-            backend:
-              service:
-                name: recommendations-service
-                port:
-                  number: 80
+  - http:
+      paths:
+      - path: /api(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: gateway-service
+            port:
+              number: 80
+---
+# Defines this Ingress in platform-team.
+# Tells Kubernetes which resource type and schema to use.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
+  name: assessment4-frontend
+  namespace: platform-team
+  labels:
+    app.kubernetes.io/part-of: anthony-assessment4
+    owner: anthony
+    team: platform-team
+spec:
+  ingressClassName: nginx
+  # Choose URL paths and destination Services for ingress traffic.
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend-service
+            port:
+              number: 80

@@ -1,10 +1,31 @@
+# Defines this ConfigMap in forecasting-team.
+# Tells Kubernetes which resource type and schema to use.
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
   name: forecasting-config
-  namespace: fraud-team
+  namespace: forecasting-team
+  labels:
+    app.kubernetes.io/part-of: anthony-assessment4
+    owner: anthony
+    team: forecasting-team
 data:
-  SERVICE_NAME: "forecasting"
-  MODEL_NAME: "moving-average-placeholder-v1"
-  AWS_REGION: "us-east-1"
-  LOG_LEVEL: "INFO"
+  # Supplies a non-secret application setting.
+  SERVICE_NAME: forecasting
+  # Selects SageMaker invocation for the deployed adapter.
+  MODEL_PROVIDER: sagemaker
+  # Supplies a non-secret application setting.
+  MODEL_PATH: /app/ml/models/forecasting_model.joblib
+  # Chooses the AWS region.
+  AWS_REGION: us-east-1
+  # Names this service’s SageMaker endpoint.
+  FORECASTING_SAGEMAKER_ENDPOINT: anthony-assessment4-forecasting-sagemaker
+  # Identifies the owning team in logs and dashboard metadata.
+  TEAM_NAME: forecasting-team
+  # Identifies the configured model for the dashboard.
+  MODEL_NAME: forecasting-model-v1
+  # Identifies the model release.
+  MODEL_VERSION: v1
+  # Identifies the application release; rendering overwrites it with the requested image tag.
+  SERVICE_VERSION: dashboard-ops-20261006-v1

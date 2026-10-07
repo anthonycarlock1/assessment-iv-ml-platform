@@ -1,0 +1,583 @@
+# Defines this Deployment in fraud-team.
+# Tells Kubernetes which resource type and schema to use.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
+  annotations:
+    deployment.kubernetes.io/revision: '7'
+  name: forecasting-service
+  namespace: fraud-team
+spec:
+  progressDeadlineSeconds: 600
+  # Keeps 2 pod(s) available for this workload.
+  replicas: 2
+  revisionHistoryLimit: 10
+  # Matches this Deployment to its own pod labels.
+  selector:
+    matchLabels:
+      app: forecasting-service
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  # Defines what each new pod will run.
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/restartedAt: '2026-10-03T12:03:49-05:00'
+      creationTimestamp: null
+      labels:
+        app: forecasting-service
+    spec:
+      containers:
+      # Loads the matching ConfigMap into environment variables.
+      - envFrom:
+        - configMapRef:
+            name: forecasting-config
+        # Chooses the built release from the existing ECR repository.
+        image: 388691194728.dkr.ecr.us-east-1.amazonaws.com/anthony-assessment4-forecasting:validation-fixes-v1
+        imagePullPolicy: Always
+        # Calls /health and restarts a stuck process after repeated failure.
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 8000
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: forecasting
+        # Documents the port served inside the container.
+        ports:
+        - containerPort: 8000
+          protocol: TCP
+        # Calls /ready; unready pods stop receiving Service traffic.
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /ready
+            port: 8000
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        # Requests reserve scheduling capacity; limits cap use.
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: forecasting-sagemaker
+      # Selects the ServiceAccount linked to a scoped Pod Identity role.
+      serviceAccountName: forecasting-sagemaker
+      terminationGracePeriodSeconds: 30
+---
+# Defines this Deployment in fraud-team.
+# Tells Kubernetes which resource type and schema to use.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
+  annotations:
+    deployment.kubernetes.io/revision: '7'
+  name: recommendations-service
+  namespace: fraud-team
+spec:
+  progressDeadlineSeconds: 600
+  # Keeps 2 pod(s) available for this workload.
+  replicas: 2
+  revisionHistoryLimit: 10
+  # Matches this Deployment to its own pod labels.
+  selector:
+    matchLabels:
+      app: recommendations-service
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  # Defines what each new pod will run.
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/restartedAt: '2026-10-03T12:03:49-05:00'
+      creationTimestamp: null
+      labels:
+        app: recommendations-service
+    spec:
+      containers:
+      # Loads the matching ConfigMap into environment variables.
+      - envFrom:
+        - configMapRef:
+            name: recommendations-config
+        # Chooses the built release from the existing ECR repository.
+        image: 388691194728.dkr.ecr.us-east-1.amazonaws.com/anthony-assessment4-recommendations:validation-fixes-v1
+        imagePullPolicy: Always
+        # Calls /health and restarts a stuck process after repeated failure.
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 8000
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: recommendations-service
+        # Documents the port served inside the container.
+        ports:
+        - containerPort: 8000
+          protocol: TCP
+        # Calls /ready; unready pods stop receiving Service traffic.
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /ready
+            port: 8000
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        # Requests reserve scheduling capacity; limits cap use.
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        # Allows initialization before regular health checks can cause restarts.
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /health
+            port: 8000
+            scheme: HTTP
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: recommendations-sagemaker
+      # Selects the ServiceAccount linked to a scoped Pod Identity role.
+      serviceAccountName: recommendations-sagemaker
+      terminationGracePeriodSeconds: 30
+---
+# Defines this Deployment in fraud-team.
+# Tells Kubernetes which resource type and schema to use.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
+  annotations:
+    deployment.kubernetes.io/revision: '2'
+  name: gateway-service
+  namespace: fraud-team
+spec:
+  progressDeadlineSeconds: 600
+  # Keeps 1 pod(s) available for this workload.
+  replicas: 1
+  revisionHistoryLimit: 10
+  # Matches this Deployment to its own pod labels.
+  selector:
+    matchLabels:
+      app: gateway-service
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  # Defines what each new pod will run.
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: gateway-service
+    spec:
+      containers:
+      # Loads the matching ConfigMap into environment variables.
+      - envFrom:
+        - configMapRef:
+            name: gateway-config
+        # Chooses the built release from the existing ECR repository.
+        image: 388691194728.dkr.ecr.us-east-1.amazonaws.com/anthony-assessment4-fraud:gateway-validation-fixes-v1
+        imagePullPolicy: IfNotPresent
+        # Calls /health and restarts a stuck process after repeated failure.
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 8000
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: gateway
+        # Documents the port served inside the container.
+        ports:
+        - containerPort: 8000
+          protocol: TCP
+        # Calls /ready; unready pods stop receiving Service traffic.
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /ready
+            port: 8000
+            scheme: HTTP
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 30
+        # Requests reserve scheduling capacity; limits cap use.
+        resources:
+          limits:
+            cpu: 500m
+            memory: 256Mi
+          requests:
+            cpu: 100m
+            memory: 64Mi
+        # Allows initialization before regular health checks can cause restarts.
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /health
+            port: 8000
+            scheme: HTTP
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+---
+# Defines this Deployment in fraud-team.
+# Tells Kubernetes which resource type and schema to use.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
+  annotations:
+    deployment.kubernetes.io/revision: '2'
+  name: frontend-service
+  namespace: fraud-team
+spec:
+  progressDeadlineSeconds: 600
+  # Keeps 1 pod(s) available for this workload.
+  replicas: 1
+  revisionHistoryLimit: 10
+  # Matches this Deployment to its own pod labels.
+  selector:
+    matchLabels:
+      app: frontend-service
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  # Defines what each new pod will run.
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: frontend-service
+    spec:
+      containers:
+      # Chooses the built release from the existing ECR repository.
+      - image: 388691194728.dkr.ecr.us-east-1.amazonaws.com/anthony-assessment4-fraud:frontend-validation-fixes-v1
+        imagePullPolicy: IfNotPresent
+        # Calls /health and restarts a stuck process after repeated failure.
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 80
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: frontend
+        # Documents the port served inside the container.
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        # Calls /ready; unready pods stop receiving Service traffic.
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 80
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        # Requests reserve scheduling capacity; limits cap use.
+        resources:
+          limits:
+            cpu: 500m
+            memory: 256Mi
+          requests:
+            cpu: 100m
+            memory: 64Mi
+        # Allows initialization before regular health checks can cause restarts.
+        startupProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /health
+            port: 80
+            scheme: HTTP
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+---
+# Defines this Service in fraud-team.
+# Tells Kubernetes which resource type and schema to use.
+apiVersion: v1
+kind: Service
+metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
+  annotations: {}
+  name: forecasting-service
+  namespace: fraud-team
+spec:
+  internalTrafficPolicy: Cluster
+  # Maps the Service port to the target container port.
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8000
+  # Sends traffic only to pods matching this application’s labels.
+  selector:
+    app: forecasting-service
+  sessionAffinity: None
+  # Uses an internal stable ClusterIP address.
+  type: ClusterIP
+---
+# Defines this Service in fraud-team.
+# Tells Kubernetes which resource type and schema to use.
+apiVersion: v1
+kind: Service
+metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
+  annotations: {}
+  name: recommendations-service
+  namespace: fraud-team
+spec:
+  internalTrafficPolicy: Cluster
+  # Maps the Service port to the target container port.
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8000
+  # Sends traffic only to pods matching this application’s labels.
+  selector:
+    app: recommendations-service
+  sessionAffinity: None
+  # Uses an internal stable ClusterIP address.
+  type: ClusterIP
+---
+# Defines this Service in fraud-team.
+# Tells Kubernetes which resource type and schema to use.
+apiVersion: v1
+kind: Service
+metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
+  annotations: {}
+  name: gateway-service
+  namespace: fraud-team
+spec:
+  internalTrafficPolicy: Cluster
+  # Maps the Service port to the target container port.
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8000
+  # Sends traffic only to pods matching this application’s labels.
+  selector:
+    app: gateway-service
+  sessionAffinity: None
+  # Uses an internal stable ClusterIP address.
+  type: ClusterIP
+---
+# Defines this Service in fraud-team.
+# Tells Kubernetes which resource type and schema to use.
+apiVersion: v1
+kind: Service
+metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
+  annotations: {}
+  name: frontend-service
+  namespace: fraud-team
+spec:
+  internalTrafficPolicy: Cluster
+  # Maps the Service port to the target container port.
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  # Sends traffic only to pods matching this application’s labels.
+  selector:
+    app: frontend-service
+  sessionAffinity: None
+  # Uses an internal stable ClusterIP address.
+  type: ClusterIP
+---
+# Defines this ConfigMap in fraud-team.
+# Tells Kubernetes which resource type and schema to use.
+apiVersion: v1
+data:
+  # Chooses the AWS region.
+  AWS_REGION: us-east-1
+  # Names this service’s SageMaker endpoint.
+  FORECASTING_SAGEMAKER_ENDPOINT: anthony-assessment4-forecasting-sagemaker
+  # Supplies a non-secret application setting.
+  MODEL_PATH: /app/ml/models/forecasting_model.joblib
+  # Selects SageMaker invocation for the deployed adapter.
+  MODEL_PROVIDER: sagemaker
+  # Supplies a non-secret application setting.
+  SERVICE_NAME: forecasting
+kind: ConfigMap
+metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
+  annotations: {}
+  name: forecasting-config
+  namespace: fraud-team
+---
+# Defines this ConfigMap in fraud-team.
+# Tells Kubernetes which resource type and schema to use.
+apiVersion: v1
+data:
+  # Chooses the AWS region.
+  AWS_REGION: us-east-1
+  # Supplies a non-secret application setting.
+  MODEL_PATH: /app/ml/models/recommendations_model.joblib
+  # Selects SageMaker invocation for the deployed adapter.
+  MODEL_PROVIDER: sagemaker
+  # Supplies a non-secret application setting.
+  RECOMMENDATIONS_CATALOG_PATH: /app/data/raw/recommendations_data.csv
+  # Names this service’s SageMaker endpoint.
+  RECOMMENDATIONS_SAGEMAKER_ENDPOINT: anthony-assessment4-recommendations-sagemaker
+  # Supplies a non-secret application setting.
+  SERVICE_NAME: recommendations
+kind: ConfigMap
+metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
+  annotations: {}
+  name: recommendations-config
+  namespace: fraud-team
+---
+# Defines this ConfigMap in fraud-team.
+# Tells Kubernetes which resource type and schema to use.
+apiVersion: v1
+data:
+  # Points the gateway to the correct service across namespaces.
+  FORECASTING_SERVICE_URL: http://forecasting-service.fraud-team.svc.cluster.local
+  # Points the gateway to the correct service across namespaces.
+  FRAUD_SERVICE_URL: http://fraud-service.fraud-team.svc.cluster.local
+  # Points the gateway to the correct service across namespaces.
+  RECOMMENDATIONS_SERVICE_URL: http://recommendations-service.fraud-team.svc.cluster.local
+kind: ConfigMap
+metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
+  annotations: {}
+  name: gateway-config
+  namespace: fraud-team
+---
+# Defines this ServiceAccount in fraud-team.
+# Tells Kubernetes which resource type and schema to use.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
+  annotations: {}
+  labels:
+    app.kubernetes.io/part-of: anthony-assessment4
+  name: forecasting-sagemaker
+  namespace: fraud-team
+---
+# Defines this ServiceAccount in fraud-team.
+# Tells Kubernetes which resource type and schema to use.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
+  annotations: {}
+  labels:
+    app.kubernetes.io/part-of: anthony-assessment4
+  name: recommendations-sagemaker
+  namespace: fraud-team
+---
+# Defines this Ingress in fraud-team.
+# Tells Kubernetes which resource type and schema to use.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: '85'
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+  name: assessment4-ingress
+  namespace: fraud-team
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - backend:
+          service:
+            name: gateway-service
+            port:
+              number: 80
+        path: /api(/|$)(.*)
+        pathType: ImplementationSpecific
+---
+# Defines this Ingress in fraud-team.
+# Tells Kubernetes which resource type and schema to use.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
+  annotations: {}
+  name: assessment4-frontend
+  namespace: fraud-team
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - backend:
+          service:
+            name: frontend-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix

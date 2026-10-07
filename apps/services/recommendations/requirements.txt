@@ -1,7 +1,1 @@
-fastapi
-uvicorn[standard]
-joblib
-scikit-learn
-pandas
-httpx
-pytest
+-r ../../../requirements.txt

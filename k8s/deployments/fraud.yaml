@@ -17,6 +17,8 @@ spec:
         app: fraud-service
         team: fraud
     spec:
+      # Uses the workload identity authorized to invoke the fraud SageMaker endpoint.
+      serviceAccountName: fraud-sagemaker
       containers:
         - name: fraud-service
           image: 388691194728.dkr.ecr.us-east-1.amazonaws.com/anthony-assessment4-fraud:v1
@@ -26,20 +28,20 @@ spec:
           envFrom:
             - configMapRef:
                 name: fraud-config
-            - secretRef:
-                name: fraud-service-secret
           startupProbe:
             httpGet:
               path: /health
               port: 8000
             failureThreshold: 30
             periodSeconds: 5
+            timeoutSeconds: 2
           readinessProbe:
             httpGet:
               path: /ready
               port: 8000
             initialDelaySeconds: 5
             periodSeconds: 10
+            timeoutSeconds: 2
             failureThreshold: 3
           livenessProbe:
             httpGet:
@@ -47,6 +49,7 @@ spec:
               port: 8000
             initialDelaySeconds: 10
             periodSeconds: 20
+            timeoutSeconds: 2
             failureThreshold: 3
           resources:
             requests:

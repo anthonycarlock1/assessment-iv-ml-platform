@@ -1,0 +1,24 @@
+# Defines this Service in platform-team.
+# Tells Kubernetes which resource type and schema to use.
+apiVersion: v1
+kind: Service
+metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
+  name: frontend-public
+  namespace: platform-team
+  labels:
+    owner: anthony
+    app.kubernetes.io/part-of: anthony-assessment4
+    team: platform-team
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: Owner=anthony,Project=anthony-assessment4
+spec:
+  # Requests a public AWS load balancer if explicitly applied; it can add AWS cost.
+  type: LoadBalancer
+  # Sends traffic only to pods matching this application’s labels.
+  selector:
+    app: frontend-service
+  # Maps the Service port to the target container port.
+  ports:
+  - port: 80
+    targetPort: 80

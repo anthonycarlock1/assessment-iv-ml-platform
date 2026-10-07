@@ -1,3 +1,4 @@
+/* Sets fonts, colors, line height, and text rendering. */
 :root {
   font-family: Inter, 'Segoe UI', sans-serif;
   line-height: 1.5;
@@ -10,6 +11,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Makes element widths include padding and borders. */
 * {
   box-sizing: border-box;
 }
@@ -18,12 +20,14 @@ html {
   background: radial-gradient(circle at top, #0f172a 0%, #020817 55%);
 }
 
+/* Removes default margin and supplies the background/minimum height. */
 body {
   margin: 0;
   min-height: 100vh;
   background: radial-gradient(circle at top, #0f172a 0%, #020817 55%);
 }
 
+/* Uses the same font across form controls. */
 button,
 input,
 textarea,
@@ -31,11 +35,13 @@ select {
   font: inherit;
 }
 
+/* Keeps images within their containers. */
 img {
   max-width: 100%;
   display: block;
 }
 
+/* Makes the application fill the page height. */
 #root {
   min-height: 100vh;
 }

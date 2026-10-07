@@ -1,0 +1,116 @@
+{
+  "path": "deployed frontend -> gateway -> FastAPI -> SageMaker",
+  "assets": [
+    "/assets/index-BK38OTpk.js",
+    "/assets/index-BaAMTUVL.css"
+  ],
+  "probes": [
+    {
+      "path": "/health",
+      "status": 200
+    },
+    {
+      "path": "/ready",
+      "status": 200
+    },
+    {
+      "path": "/api/fraud/health",
+      "status": 200,
+      "result": {
+        "status": "healthy",
+        "service": "fraud"
+      }
+    },
+    {
+      "path": "/api/fraud/ready",
+      "status": 200,
+      "result": {
+        "status": "ready",
+        "service": "fraud",
+        "provider": "sagemaker"
+      }
+    },
+    {
+      "path": "/api/forecasting/health",
+      "status": 200,
+      "result": {
+        "status": "healthy",
+        "service": "forecasting"
+      }
+    },
+    {
+      "path": "/api/forecasting/ready",
+      "status": 200,
+      "result": {
+        "status": "ready",
+        "service": "forecasting",
+        "provider": "sagemaker"
+      }
+    },
+    {
+      "path": "/api/recommendations/health",
+      "status": 200,
+      "result": {
+        "status": "healthy",
+        "service": "recommendations"
+      }
+    },
+    {
+      "path": "/api/recommendations/ready",
+      "status": 200,
+      "result": {
+        "status": "ready",
+        "service": "recommendations",
+        "provider": "sagemaker"
+      }
+    }
+  ],
+  "predictions": [
+    {
+      "service": "fraud",
+      "request_id": "47d25ba6-4400-4d70-a38c-7635a2ea53f3",
+      "result": {
+        "model": "fraud-model-v1",
+        "provider": "sagemaker",
+        "prediction": "fraud",
+        "risk_score": 0.7604
+      }
+    },
+    {
+      "service": "forecasting",
+      "request_id": "229c79eb-5bb3-4810-970e-729b78cc2112",
+      "result": {
+        "model": "forecasting-model-v1",
+        "provider": "sagemaker",
+        "forecast": [
+          109.85,
+          109.77
+        ],
+        "periods": 2
+      }
+    },
+    {
+      "service": "recommendations",
+      "request_id": "83a90eaf-70b0-420d-88e2-823ef3f04470",
+      "result": {
+        "model": "recommendations-model-v1",
+        "provider": "sagemaker",
+        "user_id": 12,
+        "recommendations": [
+          {
+            "item_id": "item-005",
+            "category": "electronics",
+            "score": 0.5848
+          },
+          {
+            "item_id": "item-010",
+            "category": "electronics",
+            "score": 0.2884
+          }
+        ]
+      }
+    }
+  ],
+  "release": "dashboard-ops-20261006-v1",
+  "verified_at": "2026-10-06T23:10:45.750097+00:00"
+}

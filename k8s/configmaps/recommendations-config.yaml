@@ -1,10 +1,33 @@
+# Defines this ConfigMap in recommendations-team.
+# Tells Kubernetes which resource type and schema to use.
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
   name: recommendations-config
-  namespace: fraud-team
+  namespace: recommendations-team
+  labels:
+    app.kubernetes.io/part-of: anthony-assessment4
+    owner: anthony
+    team: recommendations-team
 data:
-  SERVICE_NAME: "recommendations"
-  MODEL_NAME: "recommendations-local-placeholder-v1"
-  AWS_REGION: "us-east-1"
-  LOG_LEVEL: "INFO"
+  # Supplies a non-secret application setting.
+  SERVICE_NAME: recommendations
+  # Selects SageMaker invocation for the deployed adapter.
+  MODEL_PROVIDER: sagemaker
+  # Supplies a non-secret application setting.
+  MODEL_PATH: /app/ml/models/recommendations_model.joblib
+  # Chooses the AWS region.
+  AWS_REGION: us-east-1
+  # Supplies a non-secret application setting.
+  RECOMMENDATIONS_CATALOG_PATH: /app/data/raw/recommendations_data.csv
+  # Names this service’s SageMaker endpoint.
+  RECOMMENDATIONS_SAGEMAKER_ENDPOINT: anthony-assessment4-recommendations-sagemaker
+  # Identifies the owning team in logs and dashboard metadata.
+  TEAM_NAME: recommendations-team
+  # Identifies the configured model for the dashboard.
+  MODEL_NAME: recommendations-model-v1
+  # Identifies the model release.
+  MODEL_VERSION: v1
+  # Identifies the application release; rendering overwrites it with the requested image tag.
+  SERVICE_VERSION: dashboard-ops-20261006-v1

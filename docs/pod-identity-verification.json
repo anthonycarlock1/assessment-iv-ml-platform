@@ -1,0 +1,26 @@
+[
+  {
+    "pod": "forecasting-service-7bddcc5b49-d4hst",
+    "namespace": "forecasting-team",
+    "role": "arn:aws:sts::388691194728:assumed-role/anthony-assessment4-forecasting-invoke-v2/eks-anthony-as-forecastin-05de9231-dd6e-471b-a72e-b9671dbb64d9",
+    "aws_endpoint_invocation_succeeded": true
+  },
+  {
+    "pod": "forecasting-service-7bddcc5b49-dwdfw",
+    "namespace": "forecasting-team",
+    "role": "arn:aws:sts::388691194728:assumed-role/anthony-assessment4-forecasting-invoke-v2/eks-anthony-as-forecastin-9ec7c770-c1e5-4912-a97c-bdb4fa27947b",
+    "aws_endpoint_invocation_succeeded": true
+  },
+  {
+    "pod": "recommendations-service-778cd5978d-29clr",
+    "namespace": "recommendations-team",
+    "role": "arn:aws:sts::388691194728:assumed-role/anthony-assessment4-recommendations-invoke-v2/eks-anthony-as-recommenda-27b8248f-9734-494b-90bd-b20a37bf8002",
+    "aws_endpoint_invocation_succeeded": true
+  },
+  {
+    "pod": "recommendations-service-778cd5978d-5phh2",
+    "namespace": "recommendations-team",
+    "role": "arn:aws:sts::388691194728:assumed-role/anthony-assessment4-recommendations-invoke-v2/eks-anthony-as-recommenda-69659921-c653-421c-8a2a-6ed1db11b3cd",
+    "aws_endpoint_invocation_succeeded": true
+  }
+]

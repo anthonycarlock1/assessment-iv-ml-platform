@@ -1,0 +1,23 @@
+# Defines this ConfigMap in platform-team.
+# Tells Kubernetes which resource type and schema to use.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
+  name: gateway-config
+  namespace: platform-team
+  labels:
+    app.kubernetes.io/part-of: anthony-assessment4
+    owner: anthony
+    team: platform-team
+data:
+  # Points the gateway to the correct service across namespaces.
+  FRAUD_SERVICE_URL: http://fraud-service.fraud-team.svc.cluster.local
+  # Points the gateway to the correct service across namespaces.
+  FORECASTING_SERVICE_URL: http://forecasting-service.forecasting-team.svc.cluster.local
+  # Points the gateway to the correct service across namespaces.
+  RECOMMENDATIONS_SERVICE_URL: http://recommendations-service.recommendations-team.svc.cluster.local
+  # Identifies the owning team in logs and dashboard metadata.
+  TEAM_NAME: platform-team
+  # Identifies the application release; rendering overwrites it with the requested image tag.
+  SERVICE_VERSION: dashboard-ops-20261006-v1

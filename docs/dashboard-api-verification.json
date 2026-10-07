@@ -1,0 +1,74 @@
+{
+  "verified_at": "2026-10-06T23:08:06.693738+00:00",
+  "services": [
+    {
+      "metadata": {
+        "service": "fraud",
+        "team": "fraud-team",
+        "model": "fraud-model-v1",
+        "model_version": "v1",
+        "service_version": "dashboard-ops-20261006-v1",
+        "provider": "sagemaker",
+        "endpoint": "anthony-assessment4-fraud-sagemaker",
+        "region": "us-east-1"
+      },
+      "probes": {
+        "health": {
+          "status": "healthy",
+          "service": "fraud"
+        },
+        "ready": {
+          "status": "ready",
+          "service": "fraud",
+          "provider": "sagemaker"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "service": "forecasting",
+        "team": "forecasting-team",
+        "model": "forecasting-model-v1",
+        "model_version": "v1",
+        "service_version": "dashboard-ops-20261006-v1",
+        "provider": "sagemaker",
+        "endpoint": "anthony-assessment4-forecasting-sagemaker",
+        "region": "us-east-1"
+      },
+      "probes": {
+        "health": {
+          "status": "healthy",
+          "service": "forecasting"
+        },
+        "ready": {
+          "status": "ready",
+          "service": "forecasting",
+          "provider": "sagemaker"
+        }
+      }
+    },
+    {
+      "metadata": {
+        "service": "recommendations",
+        "team": "recommendations-team",
+        "model": "recommendations-model-v1",
+        "model_version": "v1",
+        "service_version": "dashboard-ops-20261006-v1",
+        "provider": "sagemaker",
+        "endpoint": "anthony-assessment4-recommendations-sagemaker",
+        "region": "us-east-1"
+      },
+      "probes": {
+        "health": {
+          "status": "healthy",
+          "service": "recommendations"
+        },
+        "ready": {
+          "status": "ready",
+          "service": "recommendations",
+          "provider": "sagemaker"
+        }
+      }
+    }
+  ]
+}

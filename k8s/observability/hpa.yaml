@@ -1,15 +1,20 @@
+# Defines this HorizontalPodAutoscaler in fraud-team.
+# Tells Kubernetes which resource type and schema to use.
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
   name: fraud-service-hpa
   namespace: fraud-team
 spec:
+  # Choose the Deployment this autoscaler can resize.
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: fraud-service
   minReplicas: 1
   maxReplicas: 3
+  # Select the measured resource used to decide replica changes.
   metrics:
     - type: Resource
       resource:

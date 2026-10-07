@@ -1,0 +1,20 @@
+# HTTP API framework.
+fastapi==0.128.8
+# Runs the API web server.
+uvicorn[standard]>=0.34,<1
+# Validates request and response data.
+pydantic>=2.10,<3
+# Sends HTTP requests and supports API tests.
+httpx>=0.28,<1
+# Invokes AWS APIs, including SageMaker Runtime.
+boto3>=1.35,<2
+# Loads and saves trained model artifacts.
+joblib>=1.4,<2
+# Executes the saved random-forest models; the version must match artifact compatibility.
+scikit-learn==1.6.1
+# Prepares tabular model features and reads the catalog.
+pandas>=2.2,<3
+# Runs the Python tests.
+pytest>=8,<9
+# Reads and renders Kubernetes YAML.
+PyYAML>=6,<7

@@ -1,0 +1,295 @@
+{
+  "verified_at": "2026-10-06T23:09:01.135661+00:00",
+  "workloads": [
+    {
+      "service": "fraud",
+      "namespace": "fraud-team",
+      "ready_replicas": 1,
+      "ready_endpoints": [
+        "10.10.1.217"
+      ],
+      "restarts": 0,
+      "probes": {
+        "startupProbe": {
+          "failureThreshold": 30,
+          "httpGet": {
+            "path": "/health",
+            "port": 8000,
+            "scheme": "HTTP"
+          },
+          "periodSeconds": 5,
+          "successThreshold": 1,
+          "timeoutSeconds": 2
+        },
+        "livenessProbe": {
+          "failureThreshold": 3,
+          "httpGet": {
+            "path": "/health",
+            "port": 8000,
+            "scheme": "HTTP"
+          },
+          "initialDelaySeconds": 10,
+          "periodSeconds": 20,
+          "successThreshold": 1,
+          "timeoutSeconds": 2
+        },
+        "readinessProbe": {
+          "failureThreshold": 3,
+          "httpGet": {
+            "path": "/ready",
+            "port": 8000,
+            "scheme": "HTTP"
+          },
+          "initialDelaySeconds": 5,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "timeoutSeconds": 2
+        }
+      }
+    },
+    {
+      "service": "forecasting",
+      "namespace": "forecasting-team",
+      "ready_replicas": 2,
+      "ready_endpoints": [
+        "10.10.2.206",
+        "10.10.1.173"
+      ],
+      "restarts": 0,
+      "probes": {
+        "startupProbe": {
+          "failureThreshold": 30,
+          "httpGet": {
+            "path": "/health",
+            "port": 8000,
+            "scheme": "HTTP"
+          },
+          "periodSeconds": 5,
+          "successThreshold": 1,
+          "timeoutSeconds": 2
+        },
+        "livenessProbe": {
+          "failureThreshold": 3,
+          "httpGet": {
+            "path": "/health",
+            "port": 8000,
+            "scheme": "HTTP"
+          },
+          "initialDelaySeconds": 10,
+          "periodSeconds": 20,
+          "successThreshold": 1,
+          "timeoutSeconds": 2
+        },
+        "readinessProbe": {
+          "failureThreshold": 3,
+          "httpGet": {
+            "path": "/ready",
+            "port": 8000,
+            "scheme": "HTTP"
+          },
+          "initialDelaySeconds": 5,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "timeoutSeconds": 2
+        }
+      }
+    },
+    {
+      "service": "recommendations",
+      "namespace": "recommendations-team",
+      "ready_replicas": 2,
+      "ready_endpoints": [
+        "10.10.2.210",
+        "10.10.1.246"
+      ],
+      "restarts": 0,
+      "probes": {
+        "startupProbe": {
+          "failureThreshold": 30,
+          "httpGet": {
+            "path": "/health",
+            "port": 8000,
+            "scheme": "HTTP"
+          },
+          "periodSeconds": 5,
+          "successThreshold": 1,
+          "timeoutSeconds": 2
+        },
+        "livenessProbe": {
+          "failureThreshold": 3,
+          "httpGet": {
+            "path": "/health",
+            "port": 8000,
+            "scheme": "HTTP"
+          },
+          "initialDelaySeconds": 10,
+          "periodSeconds": 20,
+          "successThreshold": 1,
+          "timeoutSeconds": 2
+        },
+        "readinessProbe": {
+          "failureThreshold": 3,
+          "httpGet": {
+            "path": "/ready",
+            "port": 8000,
+            "scheme": "HTTP"
+          },
+          "initialDelaySeconds": 5,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "timeoutSeconds": 2
+        }
+      }
+    },
+    {
+      "service": "gateway",
+      "namespace": "platform-team",
+      "ready_replicas": 1,
+      "ready_endpoints": [
+        "10.10.1.254"
+      ],
+      "restarts": 0,
+      "probes": {
+        "startupProbe": {
+          "failureThreshold": 30,
+          "httpGet": {
+            "path": "/health",
+            "port": 8000,
+            "scheme": "HTTP"
+          },
+          "periodSeconds": 5,
+          "successThreshold": 1,
+          "timeoutSeconds": 2
+        },
+        "livenessProbe": {
+          "failureThreshold": 3,
+          "httpGet": {
+            "path": "/health",
+            "port": 8000,
+            "scheme": "HTTP"
+          },
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "timeoutSeconds": 2
+        },
+        "readinessProbe": {
+          "failureThreshold": 3,
+          "httpGet": {
+            "path": "/ready",
+            "port": 8000,
+            "scheme": "HTTP"
+          },
+          "periodSeconds": 30,
+          "successThreshold": 1,
+          "timeoutSeconds": 2
+        }
+      }
+    },
+    {
+      "service": "frontend",
+      "namespace": "platform-team",
+      "ready_replicas": 1,
+      "ready_endpoints": [
+        "10.10.2.28"
+      ],
+      "restarts": 0,
+      "probes": {
+        "startupProbe": {
+          "failureThreshold": 30,
+          "httpGet": {
+            "path": "/health",
+            "port": 80,
+            "scheme": "HTTP"
+          },
+          "periodSeconds": 5,
+          "successThreshold": 1,
+          "timeoutSeconds": 2
+        },
+        "livenessProbe": {
+          "failureThreshold": 3,
+          "httpGet": {
+            "path": "/health",
+            "port": 80,
+            "scheme": "HTTP"
+          },
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "timeoutSeconds": 2
+        },
+        "readinessProbe": {
+          "failureThreshold": 3,
+          "httpGet": {
+            "path": "/ready",
+            "port": 80,
+            "scheme": "HTTP"
+          },
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "timeoutSeconds": 2
+        }
+      }
+    }
+  ],
+  "admission": [
+    {
+      "namespace": "forecasting-team",
+      "quota": {
+        "limits.cpu": "6",
+        "limits.memory": "6Gi",
+        "pods": "16",
+        "requests.cpu": "2",
+        "requests.memory": "2Gi"
+      },
+      "default_resources_verified": true,
+      "oversized_container_rejected": true,
+      "over_budget_pod_rejected": true
+    },
+    {
+      "namespace": "fraud-team",
+      "quota": {
+        "limits.cpu": "6",
+        "limits.memory": "6Gi",
+        "pods": "16",
+        "requests.cpu": "2",
+        "requests.memory": "2Gi"
+      },
+      "default_resources_verified": true,
+      "oversized_container_rejected": true,
+      "over_budget_pod_rejected": true
+    },
+    {
+      "namespace": "platform-team",
+      "quota": {
+        "limits.cpu": "6",
+        "limits.memory": "6Gi",
+        "pods": "16",
+        "requests.cpu": "2",
+        "requests.memory": "2Gi"
+      },
+      "default_resources_verified": true,
+      "oversized_container_rejected": true,
+      "over_budget_pod_rejected": true
+    },
+    {
+      "namespace": "recommendations-team",
+      "quota": {
+        "limits.cpu": "6",
+        "limits.memory": "6Gi",
+        "pods": "16",
+        "requests.cpu": "2",
+        "requests.memory": "2Gi"
+      },
+      "default_resources_verified": true,
+      "oversized_container_rejected": true,
+      "over_budget_pod_rejected": true
+    }
+  ],
+  "release": "dashboard-ops-20261006-v1",
+  "pytest_passed": 106,
+  "frontend_polling_tests_passed": 3,
+  "manifest_validation": {
+    "client_dry_run": "passed",
+    "server_dry_run": "passed"
+  },
+  "legacy_copies_retired": true
+}

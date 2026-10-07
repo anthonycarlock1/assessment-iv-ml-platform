@@ -1,8 +1,11 @@
+# Defines this Namespace in fraud-team.
+# Tells Kubernetes which resource type and schema to use.
 apiVersion: v1
 kind: Namespace
 metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
   name: fraud-team
   labels:
-    project: assessment4
     owner: anthony
-    managed-by: ml-platform
+    team: fraud-team
+    app.kubernetes.io/part-of: anthony-assessment4

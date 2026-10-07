@@ -1,0 +1,11 @@
+# Exclude generated files and local dependencies from source tracking or the container build
+# context.
+.git
+**/venv
+**/.venv
+**/node_modules
+**/__pycache__
+**/.pytest_cache
+**/dist
+terraform
+*.log

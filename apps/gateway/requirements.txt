@@ -1,0 +1,6 @@
+# HTTP API framework.
+fastapi==0.128.8
+# Runs the API web server.
+uvicorn[standard]>=0.34,<1
+# Sends HTTP requests and supports API tests.
+httpx>=0.28,<1

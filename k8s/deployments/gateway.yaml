@@ -1,0 +1,68 @@
+# Defines this Deployment in platform-team.
+# Tells Kubernetes which resource type and schema to use.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # Supplies the name, namespace, and labels used to identify the workload and owner.
+  name: gateway-service
+  namespace: platform-team
+  labels:
+    app.kubernetes.io/part-of: anthony-assessment4
+    owner: anthony
+    team: platform-team
+spec:
+  # Keeps 1 pod(s) available for this workload.
+  replicas: 1
+  # Matches this Deployment to its own pod labels.
+  selector:
+    matchLabels:
+      app: gateway-service
+  # Defines what each new pod will run.
+  template:
+    metadata:
+      labels:
+        app: gateway-service
+        team: platform-team
+        owner: anthony
+    spec:
+      containers:
+      - name: gateway
+        # Chooses the built release from the existing ECR repository.
+        image: 388691194728.dkr.ecr.us-east-1.amazonaws.com/anthony-assessment4-fraud:gateway-dashboard-ops-20261006-v1
+        # Documents the port served inside the container.
+        ports:
+        - containerPort: 8000
+        # Loads the matching ConfigMap into environment variables.
+        envFrom:
+        - configMapRef:
+            name: gateway-config
+        # Allows initialization before regular health checks can cause restarts.
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          failureThreshold: 30
+          periodSeconds: 5
+          timeoutSeconds: 2
+        # Calls /health and restarts a stuck process after repeated failure.
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          timeoutSeconds: 2
+        # Calls /ready; unready pods stop receiving Service traffic.
+        readinessProbe:
+          timeoutSeconds: 2
+          periodSeconds: 30
+          httpGet:
+            path: /ready
+            port: 8000
+        # Requests reserve scheduling capacity; limits cap use.
+        resources:
+          requests:
+            cpu: 100m
+            memory: 64Mi
+          # Cap CPU and memory usage for this container.
+          limits:
+            cpu: 500m
+            memory: 256Mi

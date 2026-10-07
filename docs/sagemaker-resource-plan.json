@@ -1,0 +1,93 @@
+{
+  "account": "388691194728",
+  "region": "us-east-1",
+  "endpoints": {
+    "fraud": "anthony-assessment4-fraud-sagemaker",
+    "forecasting": "anthony-assessment4-forecasting-sagemaker",
+    "recommendations": "anthony-assessment4-recommendations-sagemaker"
+  },
+  "serverless": {
+    "memory_mb": 2048,
+    "max_concurrency": 2,
+    "provisioned_concurrency": 0
+  },
+  "eks_addon": "eks-pod-identity-agent",
+  "execution_role": "anthony-assessment4-sagemaker-execution",
+  "workload_roles": [
+    "anthony-assessment4-fraud-invoke",
+    "anthony-assessment4-forecasting-invoke-v2",
+    "anthony-assessment4-recommendations-invoke-v2"
+  ],
+  "workload_namespaces": {
+    "fraud": "fraud-team",
+    "forecasting": "forecasting-team",
+    "recommendations": "recommendations-team"
+  },
+  "existing_resources_preserved": [
+    "EKS",
+    "node groups",
+    "ECR",
+    "other students endpoints"
+  ],
+  "execution_policy": {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": "ecr:GetAuthorizationToken",
+        "Resource": "*"
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
+          "ecr:BatchGetImage",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchCheckLayerAvailability"
+        ],
+        "Resource": "arn:aws:ecr:us-east-1:388691194728:repository/anthony-assessment4-fraud"
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "logs:DescribeLogStreams"
+        ],
+        "Resource": "arn:aws:logs:us-east-1:388691194728:log-group:/aws/sagemaker/Endpoints/anthony-assessment4-*:*"
+      }
+    ]
+  },
+  "invoke_policies": {
+    "fraud": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": "sagemaker:InvokeEndpoint",
+          "Resource": "arn:aws:sagemaker:us-east-1:388691194728:endpoint/anthony-assessment4-fraud-sagemaker"
+        }
+      ]
+    },
+    "forecasting": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": "sagemaker:InvokeEndpoint",
+          "Resource": "arn:aws:sagemaker:us-east-1:388691194728:endpoint/anthony-assessment4-forecasting-sagemaker"
+        }
+      ]
+    },
+    "recommendations": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": "sagemaker:InvokeEndpoint",
+          "Resource": "arn:aws:sagemaker:us-east-1:388691194728:endpoint/anthony-assessment4-recommendations-sagemaker"
+        }
+      ]
+    }
+  }
+}
