@@ -15,6 +15,8 @@ data:
   SERVICE_NAME: forecasting
   # Selects SageMaker invocation for the deployed adapter.
   MODEL_PROVIDER: sagemaker
+  PREDICTION_HISTORY_ENABLED: "true"
+  PREDICTION_HISTORY_TABLE: anthony-assessment4-prediction-history
   # Supplies a non-secret application setting.
   MODEL_PATH: /app/ml/models/forecasting_model.joblib
   # Chooses the AWS region.

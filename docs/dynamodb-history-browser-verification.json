@@ -1,0 +1,20 @@
+{
+  "checks": [
+    {
+      "service": "fraud",
+      "history_displayed": true
+    },
+    {
+      "service": "forecasting",
+      "history_displayed": true
+    },
+    {
+      "service": "recommendations",
+      "history_displayed": true
+    }
+  ],
+  "no_automatic_history_polling": true,
+  "prediction_succeeds_during_browser_history_outage": true,
+  "release": "history-20261014T002558Z",
+  "verified_at": "2026-10-14T00:29:00.098533+00:00"
+}

@@ -19,7 +19,7 @@ flowchart LR
   Recommendations --> Models
 ```
 
-The checked-in Kubernetes configuration uses the `sagemaker` provider: FastAPI services invoke the three real SageMaker serverless endpoints. The existing trained artifacts execute inside SageMaker hosting containers. The `local` provider remains available for development and tests. Responses identify the model and provider. No database or application API key is required. The CSV catalog supplies training-compatible recommendation category/item codes, not fixed predictions.
+The checked-in Kubernetes configuration uses the `sagemaker` provider: FastAPI services invoke the three real SageMaker serverless endpoints. The existing trained artifacts execute inside SageMaker hosting containers. The `local` provider remains available for development and tests. Responses identify the model and provider. DynamoDB stores successful prediction history; inference remains available if history storage fails. No application API key is required. The CSV catalog supplies training-compatible recommendation category/item codes, not fixed predictions.
 
 `apps/services/` is canonical. Legacy `services/` entry points delegate to it. All Docker builds use the repository root as context. Models were saved with scikit-learn 1.6.1; runtime dependencies preserve that version. Recommendation preprocessing assumes the checked-in catalog matches the training dataset. If retraining, preserve encoders alongside the new artifact.
 
@@ -30,11 +30,20 @@ The checked-in Kubernetes configuration uses the `sagemaker` provider: FastAPI s
 - `dashboard/frontend/`: React/Vite dashboard with prediction forms, team ownership, model/service versions, provider details, and separate health, readiness, and metadata checks. Checks poll independently every 15 seconds after completion, with timeouts and failure isolation.
 - `data/raw/`, `ml/training/`, and `ml/models/`: training CSVs, reproducible training scripts, and packaged joblib artifacts.
 - `ml/serving/`: SageMaker hosting container implementing `/ping` and `/invocations`; one shared image selects a model through `SERVICE_NAME`.
+- `terraform/dynamodb/`: independent Terraform configuration/state for the prediction-history table and partition-scoped workload permissions.
 - `terraform/`: AWS foundation including VPC, public subnets, routing, IAM roles, EKS control plane/managed nodes, and ECR repositories.
 - `k8s/`: four team/platform namespaces, ConfigMaps, service accounts, deployments, services, ingress, resource quotas, and container limits. The fraud HPA manifest is optional and is not applied by `deploy.sh`.
 - `scripts/`, `tests/`, and `.github/workflows/`: build/deployment tools, direct and end-to-end verification, Python/frontend tests, and CI/CD.
 
 Terraform manages the foundation. `deploy_sagemaker.py` separately provisions hosting endpoints, scoped IAM roles, and EKS Pod Identity. `build.sh` and `deploy.sh` publish and deploy application images against existing infrastructure. The [rebuild runbook](docs/teardown-rebuild-runbook.md) coordinates the full lifecycle.
+
+## Prediction history
+
+All three services save successful prediction inputs, results, request IDs, and timestamps to DynamoDB. Open **Recent prediction history** below a prediction form and click **Load recent predictions** to retrieve its latest records. History is shared across users of this assessment application; it is not a private per-user account feature.
+
+Writes run as best-effort background tasks after the prediction response. They do not affect inference readiness and are not retried or durably queued; a process restart or storage outage can lose a history record. History reads return an error if storage is unavailable. Records have a 30-day TTL; expired records are hidden while DynamoDB deletion completes.
+
+Local development defaults to history disabled. The deployed ConfigMaps enable `PREDICTION_HISTORY_ENABLED` and set `PREDICTION_HISTORY_TABLE`. Provision storage before deploying those settings using [DynamoDB setup and verification](docs/dynamodb-prediction-history.md).
 
 ## Models and retraining
 
@@ -89,6 +98,7 @@ Prerequisites you must configure:
 - Authenticated AWS CLI credentials with ECR push and EKS access; prefer your existing SSO/profile. Do not put access keys in application manifests.
 - Existing `anthony-assessment4-eks` cluster and the three `anthony-assessment4-{fraud,forecasting,recommendations}` repositories in `us-east-1`.
 - Three provisioned SageMaker endpoints and workload identity when using the checked-in `sagemaker` provider. Follow the [rebuild runbook, section 6](docs/teardown-rebuild-runbook.md#6-rebuild-and-deploy-sagemaker-hosting) to build hosting, provision, check status, and verify predictions before application deployment.
+- Provisioned DynamoDB history table and scoped IAM policies for the enabled history settings; see [storage setup](docs/dynamodb-prediction-history.md).
 - Public exposure (optional): either an existing nginx ingress controller, or the optional public frontend Service below. The frontend nginx server proxies `/api/` to the gateway, so an ingress controller is not required for the public-Service option.
 - Docker Desktop running with Buildx, kubectl, and the validated Python environment.
 

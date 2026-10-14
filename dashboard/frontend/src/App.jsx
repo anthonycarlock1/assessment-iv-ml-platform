@@ -26,6 +26,17 @@ function ModelForm({service}) {
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const [elapsed, setElapsed] = useState(null)
+  const [history, setHistory] = useState(null)
+  const [historyError, setHistoryError] = useState('')
+  const [historyBusy, setHistoryBusy] = useState(false)
+  async function loadHistory() {
+    setHistoryBusy(true); setHistoryError('')
+    try {
+      const response = await request(`/${service.key}/history?limit=10`, {}, 10000)
+      setHistory(response.body)
+    } catch (err) {setHistoryError(err.message)}
+    finally {setHistoryBusy(false)}
+  }
   // Converts text inputs into the business payload, rejects empty forecast values, and sends the
   // correct prediction request.
   async function submit(event) {
@@ -59,6 +70,21 @@ function ModelForm({service}) {
       {result && <><p>Live response · {elapsed} ms · {result.body.provider} inference</p>
         <pre>{JSON.stringify(result.body, null, 2)}</pre><small>Request: {result.requestId}</small></>}
     </div>
+    <details>
+      <summary>Recent prediction history</summary>
+      <button type="button" disabled={historyBusy} onClick={loadHistory}>
+        {historyBusy ? 'Loading history…' : 'Load recent predictions'}
+      </button>
+      <div aria-live="polite">
+        {historyError && <p role="alert">{historyError}</p>}
+        {history && !history.enabled && <p>Prediction history is disabled.</p>}
+        {history?.enabled && history.items.length === 0 && <p>No saved predictions yet.</p>}
+        {history?.enabled && history.items.map(item => <div key={`${item.created_at}-${item.request_id}`}>
+          <p>{new Date(item.created_at).toLocaleString()} · Request: {item.request_id}</p>
+          <pre>{JSON.stringify({input: item.payload, result: item.result}, null, 2)}</pre>
+        </div>)}
+      </div>
+    </details>
   </article>
 }
 // Displays API-supplied team, health, readiness, model/release versions, provider, endpoint, and

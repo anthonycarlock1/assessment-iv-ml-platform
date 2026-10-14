@@ -2,9 +2,10 @@
 import os
 from typing import Optional
 from pydantic import BaseModel
-from fastapi import FastAPI, HTTPException
+from fastapi import BackgroundTasks, FastAPI, HTTPException, Query, Request
 from pydantic import ValidationError
 from apps.services.common.inference import InferenceEngine
+from apps.services.common.history import PredictionHistory
 from apps.services.common.observability import instrument
 from apps.services.common.sagemaker_adapter import RuntimeFailure, RuntimeInputRejected
 
@@ -28,6 +29,7 @@ class ServiceMetadata(BaseModel):
 def create_app(service, request_model, response_model, engine=None):
     app = FastAPI(title=f'{service} inference service')
     app.state.engine = engine or InferenceEngine(service)
+    app.state.history = PredictionHistory(service)
     instrument(app, service)
     install_validation_handler(app)
 
@@ -59,7 +61,14 @@ def create_app(service, request_model, response_model, engine=None):
     # Validates the engine result against the response model. It checks forecast length and
     # recommendation consistency, then maps bad input and downstream failures into safe HTTP
     # errors.
-    def predict(payload):
+    @app.get('/history')
+    def history(limit: int = Query(default=10, ge=1, le=50)):
+        try:
+            return app.state.history.recent(limit)
+        except Exception:
+            raise HTTPException(503, 'Prediction history unavailable')
+
+    def predict(payload, request: Request, background_tasks: BackgroundTasks):
         current = app.state.engine
         if not current.ready():
             raise HTTPException(503, 'Inference configuration or model unavailable')
@@ -69,6 +78,9 @@ def create_app(service, request_model, response_model, engine=None):
                 raise RuntimeFailure('Invalid forecast response')
             if service == 'recommendations' and (result.user_id != payload.user_id or len(result.recommendations) > payload.limit):
                 raise RuntimeFailure('Invalid recommendations response')
+            if app.state.history.enabled:
+                background_tasks.add_task(app.state.history.save, request.state.request_id,
+                                          payload.model_dump(), result.model_dump())
             return result
         except ValidationError:
             raise HTTPException(502, 'Invalid inference response')
@@ -85,6 +97,7 @@ def create_app(service, request_model, response_model, engine=None):
 
     # Attaches the service-specific request type to the common function and registers a typed
     # /predict response.
-    predict.__annotations__ = {'payload': request_model}
+    predict.__annotations__ = {'payload': request_model, 'request': Request,
+                               'background_tasks': BackgroundTasks}
     app.post('/predict', response_model=response_model)(predict)
     return app

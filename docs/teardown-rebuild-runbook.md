@@ -17,6 +17,7 @@ The sequence has been checked for Terraform validity and shell/Python syntax. A 
 | Three ECR repositories and **every image inside them** | Terraform (`force_delete=true`) | Destroy; rebuild all five application images and the SageMaker image |
 | Three SageMaker endpoints, endpoint configs, models | `scripts/deploy_sagemaker.py` | Delete the exact owned hosting resources first; reprovision after ECR |
 | SageMaker execution role and workload invocation roles | Deployment script | Retain; provisioning checks and reuses them |
+| DynamoDB prediction-history table and history IAM policies | Separate `terraform/dynamodb` state | Retain; foundation destruction does not affect history |
 | Pod Identity agent and associations | Deployment script, attached to EKS | Removed with cluster; recreate on the new cluster |
 | Kubernetes objects | Application manifests/scripts | Lost with cluster; deploy again |
 | Source, trained artifacts, local Terraform state | Local project | Preserve |
@@ -420,6 +421,8 @@ Use the same cluster-creator identity to administer the rebuilt cluster. The cur
 **Keep this rebuild variable file.** Use it for subsequent infrastructure changes. Each repeat of this runbook captures the current version/AMI again for destruction. Running an ordinary apply with defaults against the rebuilt cluster would propose the old version/AMI.
 
 ## 6. Rebuild and deploy SageMaker hosting
+
+Prediction history uses separate Terraform state. If the DynamoDB table has not been provisioned or was separately destroyed, follow [DynamoDB setup](dynamodb-prediction-history.md) after restoring workload roles and before section 7. Retain the table/state for normal foundation rebuilds; it preserves prediction history. The section 7 application ConfigMaps enable history.
 
 Choose a new release for every successful cycle. The Terraform step must finish first because the build needs ECR and provisioning needs EKS.
 

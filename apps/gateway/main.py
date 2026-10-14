@@ -2,7 +2,7 @@
 import asyncio
 import os
 import httpx
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Query, Request
 from fastapi.responses import JSONResponse
 from apps.services.common.observability import instrument
 from apps.services.common.validation import install_validation_handler, require_finite_json
@@ -68,6 +68,9 @@ def register(service):
     # Forwards only this service’s metadata request.
     async def metadata(request: Request):
         return await proxy(service, 'metadata', request)
+    async def history(request: Request, limit: int = Query(default=10, ge=1, le=50)):
+        return await proxy(service, f'history?limit={limit}', request)
+    app.get(f'/{service}/history')(history)
     app.get(f'/{service}/metadata')(metadata)
     app.post(f'/{service}/predict')(predict)
     app.get(f'/{service}/health')(health)
