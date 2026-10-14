@@ -150,9 +150,10 @@ resource "aws_iam_role_policy_attachment" "cluster_policy" {
 # Creates/configures the managed EKS control plane, including version, subnet placement, public
 # API endpoint, and role dependency.
 resource "aws_eks_cluster" "assessment" {
-  name     = "${var.owner}-${var.eks_cluster_name}"
-  role_arn = aws_iam_role.cluster.arn
-  version  = var.eks_version
+  enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+  name                      = "${var.owner}-${var.eks_cluster_name}"
+  role_arn                  = aws_iam_role.cluster.arn
+  version                   = var.eks_version
 
   # Set cluster subnets, firewall groups, and API endpoint access.
   vpc_config {

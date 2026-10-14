@@ -85,6 +85,8 @@ jobs:
           terraform validate
           terraform -chdir=dynamodb init -backend=false
           terraform -chdir=dynamodb validate
+          terraform -chdir=cloudwatch init -backend=false
+          terraform -chdir=cloudwatch validate
 
   # Runs only after validation passes and only for pushes to the main/master branch.
   deploy:

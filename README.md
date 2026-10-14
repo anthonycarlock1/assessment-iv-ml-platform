@@ -30,6 +30,7 @@ The checked-in Kubernetes configuration uses the `sagemaker` provider: FastAPI s
 - `dashboard/frontend/`: React/Vite dashboard with prediction forms, team ownership, model/service versions, provider details, and separate health, readiness, and metadata checks. Checks poll independently every 15 seconds after completion, with timeouts and failure isolation.
 - `data/raw/`, `ml/training/`, and `ml/models/`: training CSVs, reproducible training scripts, and packaged joblib artifacts.
 - `ml/serving/`: SageMaker hosting container implementing `/ping` and `/invocations`; one shared image selects a model through `SERVICE_NAME`.
+- `terraform/cloudwatch/`: independent observability configuration for EKS log collection, Container Insights, a project dashboard, and alarms.
 - `terraform/dynamodb/`: independent Terraform configuration/state for the prediction-history table and partition-scoped workload permissions.
 - `terraform/`: AWS foundation including VPC, public subnets, routing, IAM roles, EKS control plane/managed nodes, and ECR repositories.
 - `k8s/`: four team/platform namespaces, ConfigMaps, service accounts, deployments, services, ingress, resource quotas, and container limits. The fraud HPA manifest is optional and is not applied by `deploy.sh`.
@@ -180,3 +181,7 @@ See [operations dashboard requirements and verification](docs/dashboard-operatio
 For presentation preparation, see the [simplified file-by-file code talking points](docs/project-code-talking-points.md).
 
 For a complete presentation teardown and rebuild cycle, follow the [destroy/rebuild runbook](docs/teardown-rebuild-runbook.md). It covers SageMaker cleanup, Terraform plans, image builds, workload identity, deployment, and live verification.
+
+## CloudWatch monitoring
+
+EKS application logs and Container Insights metrics are collected by the CloudWatch Observability add-on using Pod Identity. All five control-plane log types are enabled. The project dashboard and 12 alarms cover API/history errors, SageMaker failures/latency, DynamoDB throttling, and node utilization. EKS log retention is 14 days. SNS alarm actions target the project topic with an email subscription; AWS requires recipient confirmation before email delivery. See [CloudWatch operations](docs/cloudwatch-operations.md) for access, thresholds, verification, and rebuild instructions.

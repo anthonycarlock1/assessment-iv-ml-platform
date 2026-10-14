@@ -1,0 +1,26 @@
+{
+  "path": "deployed frontend -> gateway -> API -> SageMaker + DynamoDB history",
+  "checks": [
+    {
+      "service": "fraud",
+      "request_id": "a3409d13-7a9f-40bb-a112-c268c937d648",
+      "created_at": "2026-10-14T01:06:02.839611+00:00",
+      "provider": "sagemaker",
+      "persisted": true
+    },
+    {
+      "service": "forecasting",
+      "request_id": "6930b1ef-641a-4c7b-b46e-f03bac932175",
+      "created_at": "2026-10-14T01:06:09.599020+00:00",
+      "provider": "sagemaker",
+      "persisted": true
+    },
+    {
+      "service": "recommendations",
+      "request_id": "8d1c0969-dd7c-498f-ac47-489190716a8b",
+      "created_at": "2026-10-14T01:06:15.296117+00:00",
+      "provider": "sagemaker",
+      "persisted": true
+    }
+  ]
+}

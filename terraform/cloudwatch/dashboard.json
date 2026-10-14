@@ -1,0 +1,256 @@
+{
+  "widgets": [
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 0,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "title": "Node CPU and memory (%)",
+        "region": "us-east-1",
+        "period": 60,
+        "stat": "Average",
+        "view": "timeSeries",
+        "metrics": [
+          [
+            "ContainerInsights",
+            "node_cpu_utilization",
+            "ClusterName",
+            "anthony-assessment4-eks"
+          ],
+          [
+            "ContainerInsights",
+            "node_memory_utilization",
+            "ClusterName",
+            "anthony-assessment4-eks"
+          ]
+        ]
+      }
+    },
+    {
+      "type": "metric",
+      "x": 12,
+      "y": 0,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "title": "Running pods and container restarts",
+        "region": "us-east-1",
+        "period": 60,
+        "stat": "Sum",
+        "view": "timeSeries",
+        "metrics": [
+          [
+            "ContainerInsights",
+            "pod_number_of_running_containers",
+            "ClusterName",
+            "anthony-assessment4-eks"
+          ],
+          [
+            "ContainerInsights",
+            "pod_number_of_container_restarts",
+            "ClusterName",
+            "anthony-assessment4-eks"
+          ]
+        ]
+      }
+    },
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 6,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "title": "SageMaker invocations and server errors",
+        "region": "us-east-1",
+        "period": 60,
+        "stat": "Sum",
+        "view": "timeSeries",
+        "metrics": [
+          [
+            "AWS/SageMaker",
+            "Invocations",
+            "EndpointName",
+            "anthony-assessment4-fraud-sagemaker",
+            "VariantName",
+            "AllTraffic",
+            {
+              "label": "fraud Invocations"
+            }
+          ],
+          [
+            "AWS/SageMaker",
+            "Invocation5XXErrors",
+            "EndpointName",
+            "anthony-assessment4-fraud-sagemaker",
+            "VariantName",
+            "AllTraffic",
+            {
+              "label": "fraud Invocation5XXErrors"
+            }
+          ],
+          [
+            "AWS/SageMaker",
+            "Invocations",
+            "EndpointName",
+            "anthony-assessment4-forecasting-sagemaker",
+            "VariantName",
+            "AllTraffic",
+            {
+              "label": "forecasting Invocations"
+            }
+          ],
+          [
+            "AWS/SageMaker",
+            "Invocation5XXErrors",
+            "EndpointName",
+            "anthony-assessment4-forecasting-sagemaker",
+            "VariantName",
+            "AllTraffic",
+            {
+              "label": "forecasting Invocation5XXErrors"
+            }
+          ],
+          [
+            "AWS/SageMaker",
+            "Invocations",
+            "EndpointName",
+            "anthony-assessment4-recommendations-sagemaker",
+            "VariantName",
+            "AllTraffic",
+            {
+              "label": "recommendations Invocations"
+            }
+          ],
+          [
+            "AWS/SageMaker",
+            "Invocation5XXErrors",
+            "EndpointName",
+            "anthony-assessment4-recommendations-sagemaker",
+            "VariantName",
+            "AllTraffic",
+            {
+              "label": "recommendations Invocation5XXErrors"
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "type": "metric",
+      "x": 12,
+      "y": 6,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "title": "SageMaker model latency (microseconds)",
+        "region": "us-east-1",
+        "period": 60,
+        "stat": "Average",
+        "view": "timeSeries",
+        "metrics": [
+          [
+            "AWS/SageMaker",
+            "ModelLatency",
+            "EndpointName",
+            "anthony-assessment4-fraud-sagemaker",
+            "VariantName",
+            "AllTraffic",
+            {
+              "label": "fraud ModelLatency"
+            }
+          ],
+          [
+            "AWS/SageMaker",
+            "ModelLatency",
+            "EndpointName",
+            "anthony-assessment4-forecasting-sagemaker",
+            "VariantName",
+            "AllTraffic",
+            {
+              "label": "forecasting ModelLatency"
+            }
+          ],
+          [
+            "AWS/SageMaker",
+            "ModelLatency",
+            "EndpointName",
+            "anthony-assessment4-recommendations-sagemaker",
+            "VariantName",
+            "AllTraffic",
+            {
+              "label": "recommendations ModelLatency"
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "type": "metric",
+      "x": 0,
+      "y": 12,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "title": "API and history write errors",
+        "region": "us-east-1",
+        "period": 60,
+        "stat": "Sum",
+        "view": "timeSeries",
+        "metrics": [
+          [
+            "Anthony/Assessment4",
+            "Api5xxErrors"
+          ],
+          [
+            "Anthony/Assessment4",
+            "HistoryWriteErrors"
+          ]
+        ]
+      }
+    },
+    {
+      "type": "metric",
+      "x": 12,
+      "y": 12,
+      "width": 12,
+      "height": 6,
+      "properties": {
+        "title": "DynamoDB throttling",
+        "region": "us-east-1",
+        "period": 60,
+        "stat": "Sum",
+        "view": "timeSeries",
+        "metrics": [
+          [
+            "AWS/DynamoDB",
+            "ReadThrottleEvents",
+            "TableName",
+            "anthony-assessment4-prediction-history"
+          ],
+          [
+            "AWS/DynamoDB",
+            "WriteThrottleEvents",
+            "TableName",
+            "anthony-assessment4-prediction-history"
+          ]
+        ]
+      }
+    },
+    {
+      "type": "log",
+      "x": 0,
+      "y": 18,
+      "width": 24,
+      "height": 6,
+      "properties": {
+        "region": "us-east-1",
+        "title": "Recent application requests and storage events",
+        "view": "table",
+        "query": "SOURCE '/aws/containerinsights/anthony-assessment4-eks/application' | fields @timestamp, kubernetes.namespace_name, log_processed.service, log_processed.request_id, log_processed.status, log_processed.event, log | sort @timestamp desc | limit 50"
+      }
+    }
+  ]
+}

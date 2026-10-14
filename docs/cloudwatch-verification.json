@@ -1,0 +1,43 @@
+{
+  "verified_at": "2026-10-14T01:07:43.691617+00:00",
+  "addon_status": "ACTIVE",
+  "control_plane_log_types": [
+    "api",
+    "audit",
+    "authenticator",
+    "controllerManager",
+    "scheduler"
+  ],
+  "dashboard": "anthony-assessment4-operations",
+  "alarms": [
+    "anthony-assessment4-Api5xxErrors",
+    "anthony-assessment4-HistoryWriteErrors",
+    "anthony-assessment4-dynamodb-ReadThrottleEvents",
+    "anthony-assessment4-dynamodb-WriteThrottleEvents",
+    "anthony-assessment4-forecasting-sagemaker-5xx",
+    "anthony-assessment4-forecasting-sagemaker-latency",
+    "anthony-assessment4-fraud-sagemaker-5xx",
+    "anthony-assessment4-fraud-sagemaker-latency",
+    "anthony-assessment4-node_cpu_utilization",
+    "anthony-assessment4-node_memory_utilization",
+    "anthony-assessment4-recommendations-sagemaker-5xx",
+    "anthony-assessment4-recommendations-sagemaker-latency"
+  ],
+  "application_log_services": [
+    "forecasting",
+    "fraud",
+    "gateway",
+    "recommendations"
+  ],
+  "frontend_access_logs_received": true,
+  "metric_filters_checked": true,
+  "container_insights_metric_samples": {
+    "node_cpu_utilization": 1,
+    "node_memory_utilization": 2,
+    "pod_number_of_running_containers": 2,
+    "pod_number_of_container_restarts": 1
+  },
+  "control_plane_logs_received": true,
+  "request_id": "cw-verify-21bbd6dd-e98e-4a75-b4e9-7a22e9d59614",
+  "retention_days": 14
+}

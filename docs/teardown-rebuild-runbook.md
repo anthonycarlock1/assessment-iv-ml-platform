@@ -17,6 +17,7 @@ The sequence has been checked for Terraform validity and shell/Python syntax. A 
 | Three ECR repositories and **every image inside them** | Terraform (`force_delete=true`) | Destroy; rebuild all five application images and the SageMaker image |
 | Three SageMaker endpoints, endpoint configs, models | `scripts/deploy_sagemaker.py` | Delete the exact owned hosting resources first; reprovision after ECR |
 | SageMaker execution role and workload invocation roles | Deployment script | Retain; provisioning checks and reuses them |
+| CloudWatch observability add-on, collector identity, dashboard, alarms | Separate `terraform/cloudwatch` state | Refresh/reapply after EKS rebuild; retain logs and state |
 | DynamoDB prediction-history table and history IAM policies | Separate `terraform/dynamodb` state | Retain; foundation destruction does not affect history |
 | Pod Identity agent and associations | Deployment script, attached to EKS | Removed with cluster; recreate on the new cluster |
 | Kubernetes objects | Application manifests/scripts | Lost with cluster; deploy again |
@@ -487,6 +488,8 @@ Long hosting model/config names are now shortened deterministically to the 63-ch
 If provisioning was interrupted, retry it with the **same image digest and release**. Choosing a new release while an existing endpoint references the previous one is deliberately rejected by the script. A new release is for the next completed destroy/rebuild cycle.
 
 ## 7. Build applications, deploy, and verify the actual path
+
+Restore [CloudWatch observability](cloudwatch-operations.md) after the rebuilt EKS cluster and Pod Identity agent are available: refresh/review/apply `terraform/cloudwatch` with its retained state, then verify the add-on. Foundation rebuilds enable control-plane logging. Keep the observability state and retained log groups; they are separate from the foundation state.
 
 ```bash
 bash scripts/build.sh
